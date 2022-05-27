@@ -1,0 +1,1007 @@
+// Base
+@import './base/settings';
+@import './base/variables';
+@import './base/helpers';
+
+// Componentes
+@import './components/spinner.scss';
+@import './components/nav.scss';
+@import './components/switch.scss';
+@import './components/modalService.scss';
+// pages
+// @import './pages/structure';
+@import './pages/home.scss';
+@import './pages/logIn.scss';
+@import './pages/newService.scss';
+@import './pages/giveFolio.scss';
+@import './pages/services.scss';
+@import './pages/techAcc.scss';
+@import './pages/admin.scss';
+@import './pages/addPerson.scss';
+@import './pages/enterprice.scss';
+
+.containerFull {
+    width: 100vw;
+    height: 100vh;
+    background-color: $background;
+}
+
+.logIn-container {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle, darken($color: $background, $amount: 0) 0%, darken($color: $Primary, $amount: 0) 100%);
+}
+
+.container-page {
+    position: relative;
+    height: 100%;
+    width: calc(100% - 350px);
+    left: 350px;
+    display: flex;
+    overflow: hidden;
+}
+
+.header {
+    height: 80px;
+    color: $Primary-Dark;
+
+    .title {
+        font-size: 1.8rem;
+        font-weight: 500;
+    }
+
+    .search {
+        width: 350px;
+    }
+
+}
+
+.main {
+    height: calc(100% - 80px);
+}
+
+.inputsContainer {
+    color: $Primary;
+
+    .icon {
+        position: absolute;
+        z-index: 1;
+        width: 40px;
+        height: 40px;
+        fill: $Primary-Dark;
+        padding: 5px;
+    }
+
+    input {
+        transition-duration: .4s;
+        background-color: darken($color: $background, $amount: 3);
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        width: 100%;
+        height: 40px;
+        font-size: 1rem;
+        text-indent: 45px;
+        border: 0;
+        border-bottom: 2px solid $Primary-Dark;
+        outline: none;
+
+        &:hover,
+        &:focus {
+            transition-duration: .4s;
+            border-bottom: 2px solid $Secondary;
+            background-color: darken($color: $background, $amount: 6);
+        }
+    }
+}
+
+.container-table {
+    background-color: darken($color: $background, $amount: 3);
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    overflow-y: auto;
+
+    table {
+        border-spacing: 0;
+        width: 100%;
+        padding: 10px 0px;
+
+        td,
+        th {
+            padding: 8px 12px;
+            font-weight: 500;
+            color: $Primary-Dark;
+            font-size: 1.3rem;
+        }
+
+        td {
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        th:first-child,
+        td:first-child {
+            text-align: left;
+        }
+
+
+        th {
+            background-color: $Primary-Dark;
+            color: $background;
+            text-transform: uppercase;
+
+            &:first-child {
+                border-top-left-radius: 5px;
+            }
+
+            &:last-child {
+                border-top-right-radius: 5px;
+            }
+        }
+
+        tr:last-child td:first-child {
+            border-bottom-left-radius: 5px;
+        }
+
+        tr:last-child td:last-child {
+            border-bottom-right-radius: 5px;
+        }
+
+        .rows {
+            cursor: pointer;
+
+            &:nth-child(even) {
+                background-color: darken($color: $background, $amount: 15);
+            }
+
+            &:hover {
+                background-color: $Primary;
+
+                td {
+                    color: $background;
+
+                    i {
+                        color: $Primary-Dark;
+                    }
+                }
+            }
+        }
+
+        .dates {
+            background-color: darken($color: $background, $amount: 8);
+            color: $Primary-Dark;
+            font-size: 1.8rem;
+        }
+
+        .row {
+            background-color: darken($color: $background, $amount: 8);
+
+            .container-inputs {
+                display: flex;
+                width: 70%;
+                margin-top: 10px;
+                position: relative;
+            }
+
+            .container-icon {
+                background-color: $Primary-Dark;
+                position: absolute;
+                z-index: 1;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-top-left-radius: 10px;
+                border-bottom-left-radius: 10px;
+            }
+
+            .icon {
+                position: absolute;
+                fill: $background;
+            }
+
+            .input {
+                width: 100%;
+                height: 40PX;
+                align-self: center;
+                border-radius: 10px;
+                font-size: 1rem;
+                text-indent: 45px;
+                border: 1px solid $Primary-Dark;
+            }
+        }
+
+
+
+        .active {
+            background-color: darken($color: $Secondary, $amount: 4);
+        }
+
+        .iconaction {
+            transition-duration: .4s;
+            background-color: darken($color: $background, $amount: 1);
+            border-radius: 10px;
+            margin: 2px;
+            width: 2.5rem;
+            height: 2.5rem;
+            fill: lighten($color: $Primary-Dark, $amount: 20);
+            cursor: pointer;
+            padding: 3px;
+
+            &:hover {
+                transition-duration: .4s;
+                fill: $background;
+                background-color: $Secondary-Light;
+            }
+        }
+
+        .iconActive {
+            background-color: lightgreen;
+            fill: darken($color: lightgreen, $amount: 60);
+        }
+
+        .iconInactive {
+            background-color: lightcoral;
+            fill: $Secondary-Dark;
+        }
+
+
+
+        .serviceActive {
+            background-color: #81b784;
+            cursor: pointer;
+
+            &:nth-child(even) {
+                background-color: lighten($color: #81b784, $amount: 15);
+            }
+
+            &:hover {
+                background-color: darken($color: #81b784, $amount: 15);
+                color: $background;
+            }
+        }
+
+        .timeExpired {
+            background-color: $warning2;
+            cursor: pointer;
+
+            &:nth-child(even) {
+                background-color: darken($color: $warning2, $amount: 20);
+            }
+
+            &:hover {
+                background-color: darken($color: $warning2, $amount: 0);
+                color: $background;
+            }
+        }
+
+        .delivered {
+            background-color: lighten($color: $Primary, $amount: 25);
+            color: $background;
+            height: 50px;
+            cursor: pointer;
+
+            &:nth-child(even) {
+                background-color: darken($color: lighten($color: $Primary, $amount: 25), $amount: 5);
+            }
+
+            &:hover {
+                background-color: darken($color: lighten($color: $Primary, $amount: 25), $amount: 15);
+
+                color: $background;
+            }
+        }
+    }
+}
+
+.containerCalendar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 75px;
+    width: 100%;
+    color: $Primary-Dark;
+
+    .containerDatePicker {
+        margin: 0px 5px;
+        display: flex;
+
+        .DatePicker {
+
+            * {
+                color: $Primary-Dark;
+                border: 0;
+                text-decoration: none;
+                font-size: 1.6rem;
+            }
+
+            button {
+                margin-left: -10px;
+            }
+
+            label {
+                margin-bottom: -20px;
+                position: relative;
+                text-align: center;
+                font-size: 1.5rem;
+            }
+
+            input {
+                background-color: darken($color: $background, $amount: 3);
+                text-align: center;
+                font-size: 1.6rem;
+                width: 180px;
+                height: 30px;
+                border-radius: 5px;
+
+                &:hover,
+                &:focus {
+                    color: $Secondary;
+                }
+            }
+        }
+
+    }
+
+    .range {
+        padding-left: 10px;
+        padding: 0px 5px;
+        display: flex;
+        flex-direction: row;
+
+        .btn {
+            padding: 10px;
+        }
+    }
+
+    .actual {
+        margin: 0px, 15px;
+        width: 200px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: $Primary-Dark;
+
+        .containerIcon {
+            height: 40px;
+            width: 40px;
+            cursor: pointer;
+
+            .icon {
+                color: $Primary-Dark;
+            }
+        }
+    }
+
+    p {
+        font-size: 1.4rem;
+    }
+
+    .btns {
+        display: flex;
+
+        .containerIcon {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            margin-left: 5px;
+            margin-right: 5px;
+
+            .icon {
+                width: 100%;
+                height: 100%;
+                border: 1px solid $Primary-Dark;
+                border-radius: 50%;
+                box-shadow: 2px 1px 3px 3px rgba(0, 47, 108, 0.2);
+                cursor: pointer;
+                fill: $Primary-Dark;
+
+                &:hover {
+                    transition: all .4s ease;
+                    background-color: $Primary-Dark;
+                    fill: $background;
+                }
+            }
+
+            .icon2 {
+                @extend .icon;
+                border: 1px solid $Missing;
+                fill: rgb(134, 134, 134);
+
+                &:hover {
+                    background-color: $background;
+                    fill: rgb(134, 134, 134);
+                }
+            }
+        }
+    }
+}
+
+
+//---
+
+.header80 {
+    height: 80px;
+}
+
+.header100 {
+    height: 100px;
+}
+
+.header150 {
+    height: 150px;
+}
+
+.header200 {
+    height: 200px;
+}
+
+.calc0 {
+    height: calc(100% - 0px);
+}
+
+.calc80 {
+    height: calc(100% - 80px);
+}
+
+.calc100 {
+    height: calc(100% - 100px);
+}
+
+.calc150 {
+    height: calc(100% - 150px);
+}
+
+.calc200 {
+    height: calc(100% - 200px);
+}
+
+.select {
+    margin-bottom: 10px;
+    width: 400px;
+    font-size: 1rem;
+}
+
+/**----------------------------------------*/
+
+.btn {
+    transition-duration: .5s;
+    border: 0;
+    background-color: $Primary-Dark;
+    width: 40%;
+    height: 2.5rem;
+    margin-top: 1.2rem;
+    color: $background;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: 1px solid $Primary-Dark;
+    cursor: pointer;
+
+    &:hover {
+        transition-duration: .5s;
+        background-color: $background;
+        color: $Primary-Dark;
+        font-weight: 500;
+    }
+}
+
+.btn2 {
+    border: 2px solid $Primary-Dark;
+    background-color: $Primary-Dark;
+    width: max-content;
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 2rem;
+    margin-top: 1.2rem;
+    color: $background;
+    font-size: 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: $background;
+        border: 2px solid $Primary-Dark;
+        color: $Primary-Dark;
+        font-weight: bold;
+        transition: all .6s;
+    }
+}
+
+.btn3 {
+    border: 2px solid $background;
+    background-color: $background;
+    width: max-content;
+    height: max-content;
+    padding: 5px;
+    color: $Primary-Dark;
+    font-size: 1.3rem;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+
+    &:hover {
+        background-color: darken($color: $background, $amount: 10);
+        transition: background-color .5s ease;
+        color: $Secondary;
+        transition-duration: .5s;
+    }
+}
+
+.text {
+    margin-top: 3rem;
+    margin-bottom: .3rem;
+    font-size: 1.5rem;
+    color: $Primary-Dark;
+}
+
+.text1 {
+    text-align: center;
+    margin-bottom: .3rem;
+    font-size: 1.5rem;
+    color: $Primary-Dark;
+}
+
+.icon-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: $Primary-Dark;
+    width: 1.7rem;
+    height: 1.7rem;
+    font-weight: bold;
+    color: $background;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: $Secondary;
+        margin-top: -.2rem;
+        margin-left: -.2rem;
+        width: 1.9rem;
+        height: 1.9rem;
+    }
+}
+
+.icon-add {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: $Primary-Dark;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-top: 10px;
+    margin-right: 10px;
+    z-index: 10;
+    padding: 5px;
+    border-radius: 50%;
+    color: $background;
+    cursor: pointer;
+
+    &:hover {
+        margin-left: -.1rem;
+        width: 2.7rem;
+        height: 2.7rem;
+        transition: all .2s;
+        background-color: $Secondary;
+        font-weight: 500;
+    }
+}
+
+.text-center {
+    text-align: center;
+}
+
+.dropdown {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+
+    .item {
+        margin-left: 0px;
+    }
+
+    .item-selected {
+        margin-left: 0px;
+    }
+
+    .content {
+        border: 1px solid $Primary;
+        background-color: $background;
+        display: none;
+        position: absolute;
+        width: 100%;
+        overflow: auto;
+        box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.4);
+        border-radius: 10px;
+        padding: 5px;
+        margin-top: -7px;
+
+        .option {
+            transition-duration: .3s;
+            display: flex;
+            align-items: center;
+            padding: 5px;
+            cursor: pointer;
+            color: $Primary-Dark;
+            border-radius: 10px;
+
+            .icon {
+                width: 1.5rem;
+                height: 1.5rem;
+                fill: $Primary-Dark;
+            }
+
+            &:hover {
+                transition-duration: 1s;
+                color: $background;
+                background-color: $Primary-Dark;
+            }
+        }
+
+        .optionActive {
+            @extend .option;
+            background-color: $Primary-Dark;
+            color: $background;
+        }
+    }
+}
+
+.none {
+    display: none;
+}
+
+.flex-center {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.marL1 {
+    margin-left: .5rem;
+}
+
+.marR1 {
+    margin-right: .5rem;
+}
+
+
+
+.containerForm {
+
+    .FormAddEdit {
+        background-color: $background;
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        padding: 15px;
+        border-radius: 10px;
+
+        h1 {
+            text-align: center;
+        }
+
+        label {
+            padding: 5px;
+            height: min-content;
+            display: flex;
+            flex-direction: column;
+            font-size: 1rem;
+            font-weight: 600;
+            color: $Primary;
+
+            p {
+                font-weight: lighter;
+                color: $Secondary;
+            }
+
+            input {
+                color: $Primary-Dark;
+                padding: 8px;
+                position: relative;
+                transition-duration: .5s;
+                outline: none;
+                border: 1px solid $Missing;
+                font-size: 1.2rem;
+                border-radius: 6px;
+                font-weight: lighter;
+                margin-top: 5px;
+
+                &:hover {
+                    border-color: $Primary;
+                }
+
+                &:focus {
+                    transition-duration: .5s;
+                    border-color: $Primary-Light;
+                    background-color: darken($color: $background, $amount: 1);
+                }
+            }
+
+            .select {
+                width: 100%;
+
+                * {
+                    color: $Primary-Dark;
+                    font-weight: lighter;
+                    outline: none;
+                    border-color: $Primary;
+                    border-width: 1px;
+                }
+
+                svg {
+                    fill: $Primary-Dark;
+                    cursor: pointer;
+
+                    &:hover {
+                        fill: $Secondary;
+                    }
+                }
+            }
+        }
+
+        .switch-gral-container {
+            margin: auto;
+
+            .switch {
+                width: 50px;
+                height: 28px;
+            }
+        }
+
+        .containerInput {
+            display: flex;
+            width: 100%;
+            height: min-content;
+            justify-content: space-between;
+
+            label {
+                width: 50%;
+            }
+        }
+
+        .containerBtn {
+            width: 100%;
+            height: min-content;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 5px;
+
+            .btn {
+                margin: 0;
+                transition-duration: .5s;
+                width: min-content;
+                height: min-content;
+                padding: 12px;
+                padding-left: 25px;
+                padding-right: 25px;
+                border: 1px solid $Primary-Dark;
+
+                &:hover {
+                    font-weight: 600;
+                    transition-duration: .5s;
+                    background-color: darken($color: $background, $amount: 8);
+                    color: $Primary-Dark;
+                    border: 1px solid $Primary-Dark;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 1400px) {
+    * {
+        font-size: .9rem;
+    }
+
+    .nav-container {
+        width: 250px;
+
+        .body {
+            nav {
+                ul {
+                    .item {
+                        height: 40px;
+                        font-size: 1rem;
+
+                        .icon {
+                            width: 1.7rem;
+                            height: 1.7rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .container-page {
+        width: calc(100% - 250px);
+        left: 250px;
+    }
+
+    .containerCalendar {
+        .containerDatePicker {
+            .DatePicker {
+                input {
+                    width: 120px;
+                    font-size: 1.4rem;
+                }
+            }
+        }
+
+        .btns {
+            .containerIcon {
+                width: 55px;
+                height: 55px;
+            }
+        }
+
+        p {
+            font-size: 1rem;
+        }
+    }
+
+    .services-container,
+    .servicesTechAcc-container {
+        .header {
+            .search {
+                display: flex;
+                flex-direction: column;
+                margin: auto;
+                width: 350px;
+            }
+
+            .title {
+                font-size: 1.7rem;
+            }
+
+            .select {
+                width: 100%;
+            }
+        }
+    }
+
+    .container-table {
+        table {
+            .iconaction {
+                width: 1.5rem;
+                height: 1.5rem;
+            }
+
+            td {
+                font-size: .8rem;
+            }
+
+            th {
+                font-size: .9rem;
+            }
+        }
+    }
+
+    .containerAddPerson {
+        .containerForm {
+            margin-left: 0px;
+        }
+
+        justify-content: center;
+    }
+
+    .Modal {
+        .modal-container {
+            .modal-content {
+                width: calc(100% - 10px);
+                height: calc(100% - 10px);
+
+                .body {
+                    h3 {
+                        font-size: 1.3rem;
+                    }
+
+                    section {
+                        .technicals {
+                            .title {
+                                font-size: 1.4rem;
+                            }
+
+                            .btn2 {
+                                font-size: 1.1rem;
+                            }
+                        }
+
+                        .top2 {
+                            .folio {
+                                p {
+                                    font-size: 1.2rem;
+                                }
+
+                                ul {
+                                    li {
+                                        b {
+                                            font-size: 1rem;
+                                        }
+                                    }
+                                }
+
+                                .container-comments {
+                                    textarea {
+                                        font-size: .95rem;
+                                    }
+                                }
+                            }
+                        }
+
+                        .bottom {
+                            .list {
+                                * {
+                                    font-size: .8rem;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .containerForm {
+                    width: 100%;
+                    height: 100%;
+
+                    * {
+                        font-size: 1rem;
+                    }
+                }
+            }
+
+            .FormCustom {
+                width: 75%;
+                height: min-content;
+            }
+        }
+    }
+
+    .newService-container {
+        overflow: auto;
+
+        .main {
+
+            h1 {
+                font-size: 1.3rem;
+            }
+
+            .containerForm {
+                min-width: 300px;
+                max-width: 450px;
+
+                .container-search {
+
+                    .filter {
+
+                        .texto2 {
+                            font-size: 1rem;
+                        }
+
+                        .btnFilter,
+                        .btnFilterActivo {
+                            font-size: 1rem;
+                            padding: 10;
+                        }
+                    }
+
+                }
+            }
+
+            .containerData {
+                min-width: 400px;
+                max-width: 450px;
+                height: calc(100% - 20px);
+                overflow-y: auto;
+            }
+        }
+    }
+}

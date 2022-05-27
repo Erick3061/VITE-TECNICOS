@@ -1,0 +1,158 @@
+@import '../base/variables.scss';
+
+.container-icon-menu {
+    display: none;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 2;
+}
+
+.nav-container {
+    position: fixed;
+    background-color: $background;
+    height: 100%;
+    width: 350px;
+    z-index: 1;
+    transition: left 1s ease-in;
+    box-shadow: $Primary-Dark 0px 5px 10px 0px;
+
+    .header {
+        width: 100%;
+        height: 350px;
+        padding: 10px;
+        overflow: auto;
+
+        .nav-container-img {
+            display: flex;
+            justify-content: center;
+
+            .img-mon {
+                width: 180px;
+                height: 180px;
+                border-radius: 50%;
+                border: 1px solid $Primary;
+                object-fit: cover;
+                object-position: center top;
+                margin-bottom: 5px;
+            }
+
+        }
+
+        .sep {
+            border: 1px solid rgba(2, 3, 79, 0.2);
+        }
+
+        .nav-title1 {
+            font-size: 1.4rem;
+            color: $Primary-Dark;
+            font-weight: 600;
+        }
+
+        .nav-title2 {
+            margin-top: 10px;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+            color: $Primary-Dark;
+        }
+    }
+
+    .body {
+        width: 100%;
+        height: calc(100% - 410px);
+        overflow: auto;
+        padding-left: 15px;
+        padding-right: 15px;
+
+        .icon-menu {
+            font-size: 3rem;
+        }
+
+        .icon {
+            width: 2.2rem;
+            height: 2.2rem;
+        }
+
+
+        ul {
+            width: 100%;
+            margin-bottom: 80px;
+
+            .item {
+                display: flex;
+                width: 100%;
+                height: 50px;
+                font-size: large;
+                align-items: center;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                cursor: pointer;
+                border-radius: 10px;
+                border: 1px solid $Primary-Dark;
+                color: $Primary-Dark;
+
+                &:hover,
+                &:focus {
+                    transition: .25s ease-in;
+                    background-color: $Primary;
+                    color: $background;
+                    margin-left: 10px;
+                }
+
+                .icon {
+                    fill: $Primary-Dark;
+                }
+            }
+
+            .dropDown {
+                @extend .item;
+            }
+
+            .item-selected {
+                @extend .item;
+                background-color: $Primary-Dark;
+                color: $background;
+                margin-left: 10px;
+
+                .icon {
+                    fill: $background;
+                }
+            }
+        }
+
+    }
+
+    .footer {
+        display: flex;
+        width: 100%;
+        height: 60px;
+        justify-content: flex-end;
+        padding: 10px;
+        border-top: 2px solid rgba(2, 3, 79, 0.2);
+
+        .nav-buttom {
+            position: relative;
+            display: flex;
+            width: 60%;
+            height: 40px;
+            font-size: large;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: 10px;
+            border: 1px solid $Primary-Dark;
+            color: $Primary-Dark;
+
+            &:hover,
+            :focus {
+                background-color: $Primary-Dark;
+                transition: background-color .50s ease-in;
+                color: aliceblue;
+            }
+        }
+    }
+}
+
+.sinLinea {
+    text-decoration: none;
+}

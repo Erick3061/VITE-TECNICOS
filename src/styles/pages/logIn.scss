@@ -1,0 +1,95 @@
+.logIn-container {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle, darken($color: $background, $amount: 10) 0%, darken($color: $Primary, $amount: 0) 100%);
+
+    .container-form {
+        position: relative;
+        background-color: darken($color: $background, $amount: 5);
+        width: 450px;
+        height: 400px;
+        display: flex;
+        justify-content: center;
+        border-radius: 3rem;
+        border: 2px solid $Primary-Dark;
+
+        .logo {
+            background-color: $Primary-Dark;
+            border-radius: 50%;
+            position: absolute;
+            padding: 10px;
+            top: -50px;
+            color: $background;
+            width: 100px;
+            height: 100px;
+        }
+
+        .caja-form {
+            width: 100%;
+            margin: auto;
+
+            p {
+                font-size: 1.3rem;
+            }
+
+            .form_login {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                .container-inputs {
+                    display: flex;
+                    width: 70%;
+                    margin-top: 10px;
+                    position: relative;
+
+                    .container-icon {
+                        position: absolute;
+                        z-index: 1;
+                        width: 40px;
+                        height: 40px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+
+                    .container-icon-right {
+                        @extend .container-icon;
+                        right: 0;
+                        cursor: pointer;
+                    }
+
+                    .icon {
+                        position: absolute;
+                        padding: 2px;
+                        color: $Primary-Dark;
+                    }
+
+                    .inputs {
+                        background-color: darken($color: $background, $amount: 1);
+                        width: 100%;
+                        height: 40px;
+                        font-size: 1rem;
+                        text-indent: 45px;
+                        border: 0px;
+                        outline: none;
+                        border-top-left-radius: 10px;
+                        border-top-right-radius: 10px;
+                        border-bottom: 2px solid $Primary-Dark;
+                        color: $Primary-Dark;
+
+                        &:focus,
+                        &:active {
+                            border-bottom: 2px solid $Secondary;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}

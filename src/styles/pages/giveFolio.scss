@@ -1,0 +1,11 @@
+.giveFolio-container {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    background-color: darken($color: $background, $amount: 5);
+
+    p b {
+        font-size: 2rem;
+        color: $Primary-Dark;
+    }
+}

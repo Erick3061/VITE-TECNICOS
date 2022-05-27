@@ -1,0 +1,694 @@
+@import '../base/variables';
+
+.ModalHide {
+    display: 'none';
+}
+
+.Modal {
+    width: 100%;
+    height: 100%;
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+
+    .close {
+        position: absolute;
+        right: 20px;
+        color: $background;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+
+        &:hover {
+            font-size: 45px;
+        }
+    }
+
+    .modal-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .modal-content {
+            width: 95%;
+            height: 95%;
+            border-radius: 10px;
+            -webkit-animation-name: open-top;
+            -webkit-animation-duration: 0.5s;
+            animation-name: open-top;
+            animation-duration: 0.5s;
+
+            .header {
+                position: relative;
+                background-color: $Primary-Dark;
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+                height: 50px;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                h1 {
+                    width: auto;
+                    color: $background;
+                    font-weight: 400;
+                }
+
+            }
+
+            .body {
+                border-left: 1px solid $Primary-Dark;
+                border-right: 1px solid $Primary-Dark;
+                background-color: darken($color: $background, $amount: 2);
+                position: relative;
+                height: calc(100% - 100px);
+
+                .container-cuadro {
+                    display: inline-flex;
+                    flex-direction: column;
+                    position: relative;
+                    justify-content: center;
+                    align-items: center;
+                    width: 40px;
+                    height: 40px;
+                    margin-left: 5px;
+                    margin-right: 5px;
+                    margin-top: 5px;
+                    margin-bottom: 5px;
+                    border-radius: 10px;
+                    border: 0px;
+
+                    .cuadro {
+                        color: $background;
+                        font-size: 1.3rem;
+                        font-weight: bold;
+                    }
+
+                }
+
+
+                .container-countDown {
+                    width: 100%;
+                    height: 30px;
+                    font-weight: bold;
+                    background-color: $Primary-Dark;
+
+                    p {
+                        padding-left: 10px;
+                        color: $background;
+                        font-size: 26px;
+                    }
+
+                }
+
+                section {
+                    width: 100%;
+                    height: calc(100% - 30px);
+                    overflow: auto;
+                    color: $Primary-Dark;
+
+                    .folio {
+                        width: calc(100% - 10px);
+                        overflow: auto;
+                        padding: 10px;
+                        // border: 1px solid $Primary-Dark;
+                        background-color: darken($color: $background, $amount: 7);
+                        border-radius: 10px;
+                        margin-left: 10px;
+                        margin-right: 5px;
+                        margin-top: 10px;
+
+                        h3 {
+                            height: 20px;
+                            text-align: center;
+                        }
+
+                        ul {
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            position: relative;
+                            height: 120px;
+
+                            li {
+                                b {
+                                    font-size: 1.1rem;
+                                }
+
+                                padding-top: 5px;
+                                font-size: $p-3;
+                            }
+
+                        }
+
+                        div {
+                            display: flex;
+                            width: 100%;
+                            height: 110px;
+                            justify-content: center;
+
+                            .container-folio {
+                                display: inline-flex;
+                                flex-direction: column;
+                                align-items: center;
+
+                                p {
+                                    padding-top: 5px;
+                                    color: $Primary-Dark;
+                                    font-size: 1.3rem;
+                                }
+
+                                b {
+                                    padding-top: 5px;
+                                    font-size: 1.5rem;
+                                }
+                            }
+
+                            .container-ver-claves {
+                                display: inline-flex;
+                                flex-direction: column;
+                                align-items: center;
+
+                                b {
+                                    font-size: 1.3rem;
+                                }
+                            }
+                        }
+                    }
+
+                    .technicals {
+                        width: calc(100% - 10px);
+                        overflow: auto;
+                        padding: 10px;
+                        background-color: darken($color: $background, $amount: 7);
+                        border-radius: 10px;
+                        margin-left: 5px;
+                        margin-right: 10px;
+                        margin-top: 10px;
+
+                        .title {
+                            height: 50px;
+                            font-size: 1.7rem;
+                        }
+
+                        .moreTime {
+                            width: 100%;
+                            height: calc(100% - 50px);
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-evenly;
+
+                            .containerTime {
+                                background-color: darken($color: $background, $amount: 10);
+                                padding: 10px;
+                                border-radius: 10px;
+
+                                .title {
+                                    height: min-content;
+                                    padding-bottom: 10px;
+                                    font-size: 1.2rem;
+                                }
+
+                                .time {
+                                    display: flex;
+                                    flex-direction: column;
+                                    align-items: center;
+
+
+                                    .btn2 {
+                                        margin-top: 10px;
+                                        color: $background;
+
+                                        &:hover {
+                                            color: $Primary-Dark;
+                                        }
+                                    }
+
+                                    * {
+                                        color: $Primary-Dark;
+                                    }
+
+                                    label {
+                                        margin-bottom: -20px;
+                                        font-size: 1.2rem;
+                                        position: relative;
+                                        text-align: center;
+                                        font-weight: 600;
+                                    }
+
+                                    input {
+                                        margin-left: 5px;
+                                        margin-right: 5px;
+                                        border-radius: 10px;
+                                        text-align: center;
+                                        font-size: 2rem;
+                                        font-weight: 600;
+                                        width: 200px;
+                                    }
+                                }
+                            }
+                        }
+
+                        .btn2 {
+                            margin: 0px;
+                            height: 50px;
+                            font-size: 1.4rem;
+                            font-weight: bold;
+                        }
+
+                        .float-btn {
+                            position: absolute;
+                            width: 50px;
+                            height: 50px;
+                            padding: 1rem;
+                            border: 2px solid $Primary-Dark;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            background-color: $background;
+                            color: $Primary-Dark;
+                            border-radius: 50%;
+                            top: 1.5rem;
+                            right: 1.5rem;
+                            z-index: 10;
+                            cursor: pointer;
+
+                            i {
+                                font-size: 2rem;
+                            }
+
+                            &:hover {
+                                i {
+                                    font-weight: bold;
+                                    transition: all .1s;
+                                }
+
+                                transition: all 1s;
+                            }
+                        }
+
+                        .container-list {
+                            position: relative;
+                            height: 240px;
+
+                            div {
+                                border: 1px solid $Primary-Dark;
+                                background-color: darken($color: $background, $amount: 0);
+                                border-radius: 10px;
+                                padding: 5px;
+                                display: flex;
+                                align-items: center;
+                                cursor: pointer;
+                                margin-top: 10px;
+                                transition-duration: .5s;
+                                height: 45px;
+                                width: 80%;
+
+                                p {
+                                    font-weight: 300;
+                                    margin-left: 5px;
+                                    font-size: 1.3rem;
+                                    color: darken($color: $Primary, $amount: 5)
+                                }
+
+                                .icon {
+                                    width: 1.8rem;
+                                    height: 1.8rem;
+                                    color: darken($color: $Primary, $amount: 5)
+                                }
+
+                                &:hover {
+                                    i {
+                                        color: $Primary-Dark;
+                                        transition-duration: .5s;
+                                    }
+
+                                    p {
+                                        color: $Primary-Dark;
+                                        transition-duration: .5s;
+                                    }
+
+                                    margin-left: 20px;
+                                    background-color: darken($color: $background, $amount: 10);
+                                    transition-duration: .5s;
+                                }
+                            }
+                        }
+                    }
+
+                    .technical {
+                        position: relative;
+                        width: calc(100% - 10px);
+                        padding: 10px;
+                        background-color: darken($color: $background, $amount: 6);
+                        border-radius: 10px;
+                        margin-left: 5px;
+                        margin-right: 10px;
+                        margin-top: 10px;
+
+                        .info {
+                            width: 100%;
+                            height: calc(300px - 140px);
+                            margin-top: 30px;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: space-around;
+
+                            b {
+                                font-weight: lighter;
+
+                                span {
+                                    font-weight: 600;
+                                }
+                            }
+
+                        }
+
+                        .btns {
+                            width: calc(100% - 20px);
+                            height: 70px;
+                            position: absolute;
+                            bottom: 10px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+
+                            .btn {
+                                width: max-content;
+                                height: max-content;
+                                padding: 10px;
+                                margin: 5px;
+                                border: 2px solid $Primary-Dark;
+
+                                &:hover {
+                                    font-weight: bold;
+                                    border: 2px solid $Primary-Dark;
+                                    color: $Primary-Dark;
+                                    background-color: $background;
+                                    transition-duration: .5s;
+                                }
+                            }
+                        }
+
+
+
+                        .container-add {
+                            position: relative;
+                            display: flex;
+                            margin-top: .5rem;
+                            height: 225px;
+                            background-color: $background;
+                            border-radius: 10px;
+
+                            .select {
+                                position: relative;
+                                width: 50%;
+                                display: block;
+                                padding: 10px;
+
+                                .input {
+                                    position: absolute;
+                                    margin-top: 10px;
+                                    width: 80%;
+                                }
+                            }
+
+                            .added {
+                                margin-left: 5px;
+                                width: 100%;
+                                height: calc(100% - 50px);
+                                flex-direction: column;
+                                overflow: auto;
+                                border: 1px solid $Primary-Dark;
+                                border-radius: 10px;
+                                overflow: scroll;
+                                padding-left: 5px;
+                                padding-right: 5px;
+
+                                p b {
+                                    display: inline-flex;
+                                    padding-top: 5px;
+                                    padding-bottom: 5px;
+                                    position: relative;
+                                    margin-top: 1.5px;
+                                    font-size: $p-2;
+                                    color: $Primary;
+                                }
+
+                                i {
+                                    .icon {
+                                        width: 1.2rem;
+                                        height: 1.2rem;
+                                        cursor: pointer;
+                                        color: $background;
+                                        background-color: $Secondary-Light;
+                                        margin-bottom: -.3rem;
+                                        border-radius: 5px;
+                                        margin-left: 10px;
+                                    }
+                                }
+
+                                &::-webkit-scrollbar {
+                                    display: none;
+                                }
+                            }
+
+                            .send {
+                                display: flex;
+                                width: 100%;
+                                height: calc(100% - calc(100% - 50px));
+                                justify-content: center;
+                                align-items: center;
+
+                                .btn2 {
+                                    margin: 0px;
+                                }
+                            }
+                        }
+
+                        transition: all 1s;
+                    }
+
+                    .top {
+                        position: relative;
+                        width: 100%;
+                        height: 300px;
+                        display: flex;
+
+                        .folio {
+                            height: calc(300px - 10px);
+                        }
+
+                        .technicals {
+                            height: calc(300px - 10px);
+                        }
+
+                        .technical {
+                            height: calc(300px - 10px);
+                        }
+                    }
+
+                    .top2 {
+                        position: relative;
+                        width: 100%;
+                        display: flex;
+                        color: $Primary-Dark;
+
+                        .folio {
+                            p {
+                                font-size: 1.4rem;
+                                padding-top: 10px;
+                                font-weight: bold;
+                            }
+
+                            ul {
+                                padding-left: 20px;
+                                height: min-content;
+                                display: block;
+                                position: relative;
+
+                                li {
+                                    list-style: none;
+                                    font-weight: 500;
+
+                                    b {
+                                        font-size: 1.1rem;
+                                    }
+
+                                    padding-top: 5px;
+                                    font-size: $p-3;
+                                }
+                            }
+
+                            .container-technicals {
+                                height: min-content;
+                                position: relative;
+
+                                .technicals {
+                                    background-color: darken($color: $background, $amount: 13);
+                                    display: flex;
+                                    border: 0;
+                                    flex-direction: column;
+                                    margin: 0;
+                                    height: 250px;
+
+                                    div {
+                                        display: flex;
+                                        justify-content: flex-start;
+
+                                        p {
+                                            padding: 0;
+                                        }
+                                    }
+                                }
+
+                                .technical {
+                                    background-color: darken($color: $background, $amount: 13);
+                                    border: 0;
+                                    display: flex;
+                                    flex-direction: column;
+                                    margin: 0;
+                                    height: 250px;
+
+                                    h3 {
+                                        text-align: left;
+                                    }
+
+                                    .info {
+                                        border: 0;
+                                        margin-top: 10px;
+
+                                        p {
+                                            font-size: 1rem;
+                                        }
+                                    }
+                                }
+                            }
+
+                            .container-comments {
+                                height: min-content;
+                                position: relative;
+
+                                textarea {
+                                    background-color: darken($color: $background, $amount: 1);
+                                    width: 100%;
+                                    height: 200px;
+                                    padding: 10px;
+                                    font-size: 1rem;
+                                    font-weight: 600;
+                                    font-style: oblique;
+                                    color: $Primary-Dark;
+                                }
+                            }
+                        }
+                    }
+
+                    .bottom {
+                        display: flex;
+
+                        p {
+                            font-weight: bold;
+                        }
+
+                        .ze {
+                            padding-top: 20px;
+                        }
+
+                        .list {
+                            background-color: darken($color: $background, $amount: 1.5);
+                            border-radius: 10px;
+                            margin-top: 20px;
+
+                            li {
+                                padding: 5px;
+                                font-size: .85rem;
+                                color: $Primary-Dark;
+                            }
+                        }
+
+                        .card {
+                            width: calc(50% - 10px);
+                            overflow: auto;
+                            padding: 10px;
+                            // border: 1px solid $Primary-Dark;
+                            background-color: darken($color: $background, $amount: 7);
+                            border-radius: 10px;
+                            margin-left: 10px;
+                            margin-right: 10px;
+                            margin-top: 10px;
+                            margin-bottom: 20px;
+
+                        }
+                    }
+                }
+
+                .containerForm {
+                    height: min-content;
+
+                    .FormAddEdit {
+                        background-color: transparent;
+                    }
+                }
+            }
+
+            .footer {
+                position: relative;
+                background-color: $Primary-Dark;
+                border-bottom-right-radius: 10px;
+                border-bottom-left-radius: 10px;
+                height: 50px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                .btn3 {
+                    margin-left: 10px;
+                }
+            }
+
+
+            &::after {
+                -webkit-animation-name: close-left;
+                -webkit-animation-duration: 5s;
+                animation-name: close-left;
+                animation-duration: 5s;
+            }
+
+            transition: all .4s;
+        }
+
+        .FormCustom {
+            width: 50%;
+            height: min-content;
+        }
+    }
+}
+
+@-webkit-keyframes open-top {
+    from {
+        top: 0px;
+        opacity: 0;
+    }
+
+    to {
+        top: 0;
+    }
+}
+
+@keyframes open-top {
+    from {
+        top: 0px;
+        opacity: 0;
+    }
+
+    to {
+        top: 0;
+    }
+}
