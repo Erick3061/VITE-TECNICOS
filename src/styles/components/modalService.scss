@@ -190,26 +190,6 @@
                             right: 5px;
                             top: 5px;
                         }
-
-                        .container-img {
-                            background-color: $background;
-                            margin-top: 10px;
-                            border-radius: 10px;
-                            height: calc(100% - 50px);
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-
-                            img {
-                                border-radius: 10px;
-                                margin: 5px;
-                                height: 90%;
-                                border: 1px solid $Primary;
-                                object-fit: contain;
-                                object-position: center top;
-                                margin-bottom: 5px;
-                            }
-                        }
                     }
 
                     .technicals {
@@ -513,6 +493,27 @@
 
                         .folio {
                             height: calc(300px - 10px);
+
+                            .container-img {
+                                overflow: auto;
+                                background-color: $background;
+                                margin-top: 10px;
+                                border-radius: 10px;
+                                height: calc(100% - 30px);
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+
+                                img {
+                                    border-radius: 10px;
+                                    margin: 5px;
+                                    height: 150px;
+                                    border: 1px solid $Primary;
+                                    object-fit: contain;
+                                    object-position: center top;
+                                    margin-bottom: 5px;
+                                }
+                            }
                         }
 
                         .technicals {
@@ -530,7 +531,31 @@
                         display: flex;
                         color: $Primary-Dark;
 
+
                         .folio {
+
+                            .container-img {
+                                margin-top: 5px;
+                                overflow: auto;
+                                background-color: $background;
+                                display: flex;
+                                flex-wrap: wrap;
+                                width: 100%;
+                                height: auto;
+                                border-radius: 10px;
+                                justify-content: space-around;
+
+                                img {
+                                    height: auto;
+                                    width: 180px;
+                                    border-radius: 10px;
+                                    margin: 5px;
+                                    object-fit: contain;
+                                    object-position: center top;
+                                    margin-bottom: 5px;
+                                }
+                            }
+
                             p {
                                 font-size: 1.4rem;
                                 padding-top: 10px;

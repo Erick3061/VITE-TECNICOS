@@ -155,6 +155,7 @@ export const ModalService = ({ Service, setService }: Props) => {
     const update = () => {
         queryClient.invalidateQueries(['serviceActive']);
         accountMW.refetch().then(() => verify.refetch());
+        directory.mutate({ id: `${service?.service.id_service}`, type: 'Service' })
     }
 
     const sendTechnicals = async () => updateTechnicalsMutate.mutate({ id_service: service!.service.id_service, technicals });

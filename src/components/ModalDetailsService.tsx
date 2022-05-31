@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { useQuery } from 'react-query';
-import { getServiceWithDetails } from '../api/Api';
+import { useMutation, useQuery } from 'react-query';
+import { baseUrl, getDirectory, getServiceWithDetails } from '../api/Api';
 import { Person, ServiceDetails, Services, TechnicalInfo } from '../rules/interfaces';
-import { ShowError } from './Swal';
+import { ShowError, ShowMessage, ViewImg } from './Swal';
 import { Icon } from '@mdi/react';
 import { mdiAccount as IconTechnical } from '@mdi/js';
-import { mdiClose as IconClose } from '@mdi/js';
+import { mdiClose as IconClose, mdiImage as IconImage } from '@mdi/js';
 
 interface props {
     setService: React.Dispatch<React.SetStateAction<Services | undefined>>,
@@ -23,6 +23,21 @@ export const ModalDetailsService = ({ Service, setService }: props) => {
     const [UsersMissing, setUsersMissing] = useState<Array<{ code: string, name: string }>>();
     const [Technicals, setTechnicals] = useState<Array<TechnicalInfo>>();
     const [UsersUndefined, setUsersUndefined] = useState<Array<string>>();
+
+    const [files, setfiles] = useState<Array<string> | undefined>(undefined);
+    const [isPhotos, setIsPhotos] = useState<boolean>(false);
+
+
+    const directory = useMutation('directory', getDirectory, {
+        retry: false,
+        onError: error => {
+            ShowMessage({ title: 'Error', text: `${error}`, icon: 'error', });
+        },
+        onSuccess: ({ files }) => {
+            setfiles(files);
+        }
+    });
+
 
 
     const { refetch, isLoading, isFetching } = useQuery(["ServiceDetails"], () => getServiceWithDetails((Service) ? Service.id_service : ''),
@@ -46,6 +61,9 @@ export const ModalDetailsService = ({ Service, setService }: props) => {
                 setUsersUndefined(usersUndefined);
                 const technicals = JSON.parse(data.binnacle[0].technicals);
                 setTechnicals(technicals);
+
+                if (data.service.filesCron === 'going up') directory.mutate({ id: data.service.id_service, type: 'Service' });
+                else setfiles([]);
             },
             onError: async error => await ShowError(`${error}`)
         }
@@ -76,30 +94,47 @@ export const ModalDetailsService = ({ Service, setService }: props) => {
                                     <article className='top2'>
                                         <div className='folio'>
                                             <p>DATOS DEL SERVICIO</p>
-                                            <ul>
-                                                <li><b>Nombre: </b>{service?.service?.nameAccount}</li>
-                                                <li><b>Abonado - Digital: </b>{service?.service?.digital}</li>
-                                                <li><b>Numero de Cliente: </b>{service?.service?.accountMW}</li>
-                                                <li><b>Folio: </b>{service?.service.folio}</li>
-                                            </ul>
-                                            <p>Entrada y salida</p>
-                                            <ul>
-                                                <li><b>Otorgó Entrada: </b>{service?.service.grantedEntry}</li>
-                                                <li><b>Fecha y Hora: </b>{`${service?.service.entryDate}`.replace('T', ' ').substring(0, 19)}</li>
-                                                <li><b>Otorgó Salida: </b>{service?.service.grantedExit}</li>
-                                                <li><b>Fecha y Hora: </b>{`${service?.service.exitDate}`.replace('T', ' ').substring(0, 19)}</li>
-                                            </ul>
-                                            <p>Verificaciones</p>
-                                            <ul>
-                                                <li><b>Primer verificación: </b>{service?.service.firstVerification}</li>
-                                                <li><b>Segunda verificación: </b>{service?.service.secondVerification}</li>
-                                            </ul>
-                                            <p>Otros</p>
-                                            <ul>
-                                                <li><b>¿Se entrego el folio?: </b>{service?.service.isDelivered ? 'SI' : 'NO'}</li>
-                                                <li><b>¿Se revisó apertura y cierre?: </b>{service?.service.isOpCi ? 'SI' : 'NO'}</li>
-                                                <li><b>¿Hubo enlace?: </b>{service?.binnacle[0].link}</li>
-                                            </ul>
+                                            <i className='icon-photos' onClick={() => setIsPhotos(!isPhotos)}><Icon path={isPhotos ? IconClose : IconImage} size='40px' /></i>
+                                            {
+                                                (isPhotos)
+                                                    ?
+                                                    <div className='container-img' >
+                                                        {
+                                                            files?.map(file => {
+                                                                return <img onClick={async () => {
+                                                                    await ViewImg(`${baseUrl}/files/getImg?type=Service&id=${service?.service.id_service}&img=${file}`)
+                                                                }} src={`${baseUrl}/files/getImg?type=Service&id=${service?.service.id_service}&img=${file}`} alt="img" />
+                                                            })
+                                                        }
+                                                    </div>
+                                                    :
+                                                    <>
+                                                        <ul>
+                                                            <li><b>Nombre: </b>{service?.service?.nameAccount}</li>
+                                                            <li><b>Abonado - Digital: </b>{service?.service?.digital}</li>
+                                                            <li><b>Numero de Cliente: </b>{service?.service?.accountMW}</li>
+                                                            <li><b>Folio: </b>{service?.service.folio}</li>
+                                                        </ul>
+                                                        <p>Entrada y salida</p>
+                                                        <ul>
+                                                            <li><b>Otorgó Entrada: </b>{service?.service.grantedEntry}</li>
+                                                            <li><b>Fecha y Hora: </b>{`${service?.service.entryDate}`.replace('T', ' ').substring(0, 19)}</li>
+                                                            <li><b>Otorgó Salida: </b>{service?.service.grantedExit}</li>
+                                                            <li><b>Fecha y Hora: </b>{`${service?.service.exitDate}`.replace('T', ' ').substring(0, 19)}</li>
+                                                        </ul>
+                                                        <p>Verificaciones</p>
+                                                        <ul>
+                                                            <li><b>Primer verificación: </b>{service?.service.firstVerification}</li>
+                                                            <li><b>Segunda verificación: </b>{service?.service.secondVerification}</li>
+                                                        </ul>
+                                                        <p>Otros</p>
+                                                        <ul>
+                                                            <li><b>¿Se entrego el folio?: </b>{service?.service.isDelivered ? 'SI' : 'NO'}</li>
+                                                            <li><b>¿Se revisó apertura y cierre?: </b>{service?.service.isOpCi ? 'SI' : 'NO'}</li>
+                                                            <li><b>¿Hubo enlace?: </b>{service?.binnacle[0].link}</li>
+                                                        </ul>
+                                                    </>
+                                            }
                                         </div>
                                         <div className='folio'>
                                             <section className='container-technicals'>
