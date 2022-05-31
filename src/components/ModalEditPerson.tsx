@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { AuthContext } from '../context/AuthContext';
-import { useContext } from 'react';
 import { actionPersonProps, Enterprices, Person, Roles, ServicesTypes } from '../rules/interfaces';
 import { AddPerson, FormEditPerson } from './Modal/FormPerson';
 import { SubmitHandler } from 'react-hook-form';
-import { useQueryClient, UseMutationResult } from 'react-query';
+import { useQueryClient, UseMutationResult, useQuery, useMutation } from 'react-query';
 import { ShowMessage } from './Swal';
+import { getDirectory } from '../api/Api';
 
 
 interface props {
@@ -16,9 +15,9 @@ interface props {
     setisRestoralPassword: React.Dispatch<React.SetStateAction<boolean>>;
     isLoading: boolean;
 }
+
 export const ModalEditPerson = ({ Person, setPerson, ActionPerson, isRestoralPassword, setisRestoralPassword, isLoading }: props) => {
     const queryClient = useQueryClient();
-    const { logOut } = useContext(AuthContext);
     const [isPasswordDefined, setisPasswordDefined] = useState(false);
     const [GetGeneral, setGetGeneral] = useState<{ Enterprices: Enterprices[]; Roles: Roles[]; ServicesTypes: ServicesTypes[]; }>();
 
@@ -26,6 +25,7 @@ export const ModalEditPerson = ({ Person, setPerson, ActionPerson, isRestoralPas
     const close = (modal: Element | null) => {
         (modal) && modal.setAttribute('style', 'display: none');
         setPerson(undefined);
+        queryClient.removeQueries('directory');
     }
 
     const onSubmit: SubmitHandler<AddPerson> = async (props) => {
@@ -71,10 +71,13 @@ export const ModalEditPerson = ({ Person, setPerson, ActionPerson, isRestoralPas
     }
 
     useEffect(() => {
-        const data: { Enterprices: Enterprices[]; Roles: Roles[]; ServicesTypes: ServicesTypes[]; } | undefined = queryClient.getQueryData(["GetGeneral"]);
-        if (data) setGetGeneral(() => data);
-        else queryClient.invalidateQueries('GetGeneral');
-    }, []);
+        if (Person) {
+            const data: { Enterprices: Enterprices[]; Roles: Roles[]; ServicesTypes: ServicesTypes[]; } | undefined = queryClient.getQueryData(["GetGeneral"]);
+            if (data) setGetGeneral(() => data);
+            else queryClient.invalidateQueries('GetGeneral');
+            setisPasswordDefined(false);
+        }
+    }, [Person]);
 
     useEffect(() => {
         if (isRestoralPassword) {
@@ -97,8 +100,6 @@ export const ModalEditPerson = ({ Person, setPerson, ActionPerson, isRestoralPas
         }
     }, [ActionPerson.data]);
 
-
-
     return (
         <div id='Modal' className='Modal'>
             <div className='modal-container'>
@@ -110,10 +111,7 @@ export const ModalEditPerson = ({ Person, setPerson, ActionPerson, isRestoralPas
                     <section className='body'>
                         {
                             isLoading
-                                ?
-                                <div className='flex-center'>
-                                    <div className='spin'></div>
-                                </div>
+                                ? <div className='flex-center'> <div className='spin'></div> </div>
                                 :
                                 <div className='containerForm'>
                                     <FormEditPerson
@@ -129,8 +127,7 @@ export const ModalEditPerson = ({ Person, setPerson, ActionPerson, isRestoralPas
                         }
                     </section>
                     <section className='footer'>
-                        {/* <button className='btn3' onClick={() => { }}> Restablecer contraseña </button>
-                        <button className='btn3' onClick={() => { }}> Actualizar </button> */}
+                        <button className='btn3' onClick={() => close(document.querySelector('.Modal'))}> Cerrar </button>
                     </section>
                 </div>
             </div>

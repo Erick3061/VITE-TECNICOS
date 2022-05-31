@@ -1,7 +1,7 @@
 import { AuthState, Person } from '../rules/interfaces';
 
 type AuthAction =
-    | { type: 'logIn', payload: { person: Person } }
+    | { type: 'logIn', payload: { person: Person, directory?: string } }
     | { type: 'logOut' }
 
 export const authReducer = (state: AuthState, action: AuthAction): AuthState => {
@@ -11,7 +11,8 @@ export const authReducer = (state: AuthState, action: AuthAction): AuthState => 
             return {
                 ...state,
                 status: 'loged',
-                person: action.payload.person
+                person: action.payload.person,
+                file: action.payload.directory
             }
 
         case 'logOut':
@@ -19,6 +20,7 @@ export const authReducer = (state: AuthState, action: AuthAction): AuthState => 
                 ...state,
                 status: 'no-loged',
                 person: null,
+                file: undefined
             }
 
         default:

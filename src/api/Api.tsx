@@ -1,7 +1,7 @@
-import { LogInData, Person, ResponseApi, datalogIn, Service, Account, PropsnewService, Technical, Services, PropsUpdateService, PropsUpdateTechnical, ServiceDetails, Enterprices, ServicesTypes, Roles, actionPersonProps, bodyPerson, actionEnterpriceProps, enterprice } from '../rules/interfaces';
+import { LogInData, Person, ResponseApi, datalogIn, Service, Account, PropsnewService, Technical, Services, PropsUpdateService, PropsUpdateTechnical, ServiceDetails, Enterprices, ServicesTypes, Roles, actionPersonProps, bodyPerson, actionEnterpriceProps, enterprice, responseLoadFile } from '../rules/interfaces';
 
-const baseUrl = 'https://pem-sa.ddns.me:3007/api';
-// const baseUrl = 'http://127.0.0.1:3007/api';
+// const baseUrl = 'https://pem-sa.ddns.me:3007/api';
+export const baseUrl = 'http://127.0.0.1:3007/api';
 
 export const Api = (endpoint: string, data: object = {}, method: 'GET' | 'POST' = 'GET') => {
     const url = `${baseUrl}/${endpoint}`;
@@ -37,6 +37,20 @@ export const addService = async (props: PropsnewService) => {
         const { status, data, errors }: ResponseApi<{ isInserted: boolean, asignados: Array<string> }> = await response.json();
         if (status && data)
             return data;
+        throw new Error(errors![0].msg);
+    } catch (error) { throw new Error(`${error}`); }
+}
+
+export const loadFile = async ({ file, id, type }: { file: FormData, id: string, type: string }) => {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${baseUrl}/files/loadFile/${id}/${type}`, {
+            body: file,
+            headers: (token) ? { 'x-token': token } : {},
+            method: 'PUT'
+        })
+        const { status, data, errors }: ResponseApi<responseLoadFile> = await response.json();
+        if (status && data) return data;
         throw new Error(errors![0].msg);
     } catch (error) { throw new Error(`${error}`); }
 }
@@ -95,6 +109,16 @@ export const AllTechnicals = async () => {
     try {
         const response = await Api('sys/getPersons/1', {}, 'GET');
         const { status, data, errors }: ResponseApi<{ Persons: Array<Person> }> = await response.json();
+        if (status && data)
+            return data;
+        throw new Error(errors![0].msg);
+    } catch (error) { throw new Error(`${error}`); }
+}
+
+export const getDirectory = async ({ id, type }: { id: string, type: string }) => {
+    try {
+        const response = await Api(`files/getImgs/${id}/${type}`, {}, 'GET');
+        const { status, data, errors }: ResponseApi<{ files: Array<string> }> = await response.json();
         if (status && data)
             return data;
         throw new Error(errors![0].msg);

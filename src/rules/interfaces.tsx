@@ -1,5 +1,6 @@
 export interface AuthState {
     status: 'loged' | 'no-loged';
+    file: string | undefined;
     person: Person | null;
 }
 
@@ -106,6 +107,7 @@ export interface Service {
     isOpCi: boolean;
     isTimeExpired: boolean;
     isActive: boolean;
+    filesCron: string | null;
 }
 
 export interface LogInData {
@@ -130,7 +132,15 @@ export interface ResponseApi<T> {
 export interface datalogIn {
     Person: Person;
     token: string;
+    directory?: Array<string>;
     Service?: Service;
+}
+
+export interface responseLoadFile {
+    isInserted: boolean;
+    nameFile: string;
+    directoryFile: string;
+    fullDirectory: string;
 }
 
 

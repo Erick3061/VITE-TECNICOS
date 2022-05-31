@@ -1,12 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { AuthContext } from '../../context/AuthContext';
-import Select, { GroupBase, SingleValue, StylesConfig } from 'react-select';
+import Select, { SingleValue } from 'react-select';
 import { Enterprices, Person, Roles, ServicesTypes } from '../../rules/interfaces';
-import { useQueryClient } from 'react-query';
+import { useQueryClient, useMutation } from 'react-query';
 import { color } from '../../helpers/herpers';
 import { Switch } from '../Switch';
-import { customStyles } from '../../functions/Functions';
+import { customStyles, errorFormat } from '../../functions/Functions';
+import { Icon } from '@mdi/react';
+import { mdiImageEdit as IconEditPhoto } from '@mdi/js';
+import { mdiFileSendOutline as IconRefresh } from '@mdi/js';
+import { mdiAccount as IconUser } from '@mdi/js';
+import { SendFile, ShowError, ShowMessage, ShowMessage2 } from '../Swal';
+import { baseUrl, getDirectory, loadFile } from '../../api/Api';
 
 export interface AddPerson {
     name: string,
@@ -31,15 +37,6 @@ interface propsAddPerson {
     setisPasswordDefined: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-// const s: StylesConfig<any, false, GroupBase<any>> | undefined = {
-//     dropdownIndicator: () => ({ display: 'none' }),
-//     indicatorSeparator: () => ({ display: 'none' }),
-//     container: (provided) => ({
-//         ...provided,
-//         width: '100%',
-//         marginTop: '5px',
-//     }),
-// }
 
 export const FormAddPerson = ({ onSubmit, isLoading, enterpriceSelected, setenterpriceSelected, roleSelected, setroleSelected, operatorSelected, setoperatorSelected, isPasswordDefined, setisPasswordDefined }: propsAddPerson) => {
     const initialStateValueEnterprice: SingleValue<{ value: number; label: string; }> = { value: 0, label: 'Seleccione una empresa' };
@@ -276,11 +273,48 @@ interface propsEditPerson {
     setisPasswordDefined: React.Dispatch<React.SetStateAction<boolean>>;
     Person: Person | undefined;
     GetGeneral: { Enterprices: Enterprices[]; Roles: Roles[]; ServicesTypes: ServicesTypes[]; } | undefined;
-    setisRestoralPassword: React.Dispatch<React.SetStateAction<boolean>>
+    setisRestoralPassword: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const FormEditPerson = ({ onSubmit, isLoading, isPasswordDefined, setisPasswordDefined, Person, GetGeneral, setisRestoralPassword }: propsEditPerson) => {
     const { register, formState: { errors }, handleSubmit, setValue, reset } = useForm<AddPerson>({ criteriaMode: 'all' });
+    const { logOut } = useContext(AuthContext);
+    const [urlFile, seturlFile] = useState<string | undefined>(undefined);
+
+    const sendFileM = useMutation('sendFileM', loadFile, {
+        onSuccess: async () => {
+            ShowMessage({ text: 'Imagen agregada corractamente', title: 'Correcto', icon: 'success' });
+            directory.mutate({ id: `${Person?.id_person}`, type: 'Person' })
+        },
+        onError: async error => {
+            if (`${error}`.includes('JsonWebTokenError') || `${error}`.includes('TokenExpiredError')) {
+                await ShowError('La sesión expiró');
+                localStorage.clear();
+                logOut();
+            }
+            if (!`${error}`.includes('No hay token en la petición'))
+                await ShowError(errorFormat(`${error}`));
+        }
+    });
+
+    const directory = useMutation('directory', getDirectory, {
+        retry: false,
+        onError: error => {
+            seturlFile(undefined);
+            if (`${error}`.toLowerCase().includes('no such file or directory')) {
+                return ShowMessage2({ title: 'No existe imagen de usuario', text: '¿Quieres agregarla?', icon: 'warning', func: () => sendFile() })
+            }
+            ShowMessage({ title: 'Error', text: `${error}`, icon: 'error', });
+        },
+        onSuccess: ({ files }) => {
+            seturlFile(`${baseUrl}/files/getImg?type=Person&id=${Person?.id_person}&img=${files[0]}`);
+        }
+    });
+
+    const sendFile = async () => {
+        const rol: string = `${(Person?.id_role === 1) ? 'Técnico' : (Person?.id_role === 2) ? 'Mobitorista' : 'Encargado'}: ${Person?.personName} ${Person?.lastname}`;
+        await SendFile({ rol, id: `${Person?.id_person}`, mutate: sendFileM, type: 'Person' });
+    }
 
     useEffect(() => {
         if (Person) {
@@ -292,160 +326,180 @@ export const FormEditPerson = ({ onSubmit, isLoading, isPasswordDefined, setisPa
             (Person.phoneNumber !== null) && setValue('phoneNumber', Person.phoneNumber);
             setValue('user', (Person.nameUser !== null) ? Person.nameUser : '');
             setValue('password', Person.password);
+            directory.mutate({ id: `${Person.id_person}`, type: 'Person' });
         }
     }, [Person]);
 
+    useEffect(() => {
+        seturlFile(undefined);
+    }, []);
+
+
     return (
-        <form className='FormAddEdit' onSubmit={handleSubmit(onSubmit)}>
-            {
-                (isLoading) ?
-                    <div className='flex-center'>
-                        <div className='spin'></div>
-                    </div>
-                    :
-                    <>
-                        <label>
-                            Empresa:
-                            <Select
-                                isDisabled={true}
-                                className='select'
-                                styles={{ dropdownIndicator: () => ({ display: 'none' }), indicatorSeparator: () => ({ display: 'none' }), ...customStyles }}
-                                value={{ value: Person?.id_enterprice, label: Person?.enterpriceShortName }}
-                            />
-                        </label>
-                        <div className='containerInput'>
-                            <label>
-                                Rol:
-                                <Select
-                                    isDisabled={true}
-                                    className='select'
-                                    styles={{ dropdownIndicator: () => ({ display: 'none' }), indicatorSeparator: () => ({ display: 'none' }), ...customStyles }}
-                                    value={{ value: Person?.id_role, label: GetGeneral?.Roles.find(f => f.id_role === Person?.id_role)?.name }}
-                                />
-                            </label>
+        <>
+            <form className='FormAddEdit' onSubmit={handleSubmit(onSubmit)}>
+                {
+                    (sendFileM.isLoading || isLoading) ?
+                        <div className='flex-center'>
+                            <div className='spin'></div>
                         </div>
+                        :
+                        <>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 
-                        <div className='containerInput'>
-                            <label>
-                                Nombre(s):
-                                <input
-                                    style={{ borderColor: (errors.name) && color.Secondary }}
-                                    type={'text'}
-                                    {...register("name", {
-                                        required: { value: true, message: 'campo requerido' },
-                                        maxLength: { value: 30, message: 'El nombre no debe exeder los 30 caracteres' },
-                                        pattern: { value: /[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[A-Za-z \d*\0-9*]+$/g, message: 'Solo caracteres del alfabeto y números' }
-                                    })}
-                                />
-                                <p> {errors.name && errors.name.message} </p>
-                            </label>
-                            <label>
-                                Apellidos:
-                                <input
-                                    style={{ borderColor: (errors.lastname) && color.Secondary }}
-                                    type={'text'}
-                                    {...register("lastname", {
-                                        required: { value: true, message: 'campo requerido' },
-                                        maxLength: { value: 50, message: 'El nombre no debe exeder los 50 caracteres' },
-                                        pattern: { value: /[a-zA-ZñÑáéíóúÁÉÍÓÚ\s\A-Za-z \d*\0-9*]+$/g, message: 'Solo caracteres del alfabeto y números' }
-                                    })}
-                                />
-                                <p> {errors.lastname && errors.lastname.message} </p>
-                            </label>
-                        </div>
-
-                        <div className='containerInput'>
-                            <label>
-                                Correo:
-                                <input
-                                    disabled={(Person?.id_role === 2) ? true : false}
-                                    style={{ borderColor: (errors.email) && color.Secondary }}
-                                    type={'email'}
-                                    {...register("email", {
-                                        maxLength: { value: 50, message: 'El nombre no debe exeder los 50 caracteres' },
-                                    })}
-                                />
-                                <p> {errors.email && errors.email.message} </p>
-                            </label>
-                            <label>
-                                Usuario:
-                                <input
-                                    disabled={(Person?.id_role === 2) ? true : false}
-                                    style={{ borderColor: (errors.user) && color.Secondary }}
-                                    type={'text'}
-                                    {...register("user", {
-                                        maxLength: { value: 40, message: 'El nombre no debe exeder los 40 caracteres' },
-                                    })}
-                                />
-                                <p> {errors.user && errors.user.message} </p>
-                            </label>
-                        </div>
-
-                        <div className='containerInput'>
-                            <label>
-                                Número de empleado:
-                                <input
-                                    style={{ borderColor: (errors.employeeNumber) && color.Secondary }}
-                                    type={'text'}
-                                    {...register("employeeNumber", {
-                                        required: { value: true, message: 'campo requerido' },
-                                        maxLength: { value: 20, message: 'El nombre no debe exeder los 20 caracteres' },
-                                    })}
-                                />
-                                <p> {errors.employeeNumber && errors.employeeNumber.message} </p>
-                            </label>
-                            <label>
-                                Número teléfonico:
-                                <input
-                                    autoComplete='off'
-                                    style={{ borderColor: (errors.phoneNumber) && color.Secondary }}
-                                    type={'number'}
-                                    {...register("phoneNumber", {
-                                        minLength: { value: 10, message: 'Número de 10 digitos' },
-                                        maxLength: {
-                                            value: 10,
-                                            message: "El número teléfonico debe contener 10 digitos"
-                                        },
-                                    })}
-                                />
-                                <p> {errors.phoneNumber && errors.phoneNumber.message} </p>
-                            </label>
-                        </div>
-
-                        <div className='containerInput'>
-                            {Person?.id_role !== 2 && <Switch value={(Person?.id_role === 2) ? true : isPasswordDefined} text='Cambiar contraseña' func={setisPasswordDefined} />}
-                            {
-                                isPasswordDefined ? Person?.id_role !== 2 &&
+                                <div style={{ display: 'flex', flexDirection: 'column', width: '50%' }}>
                                     <label>
-                                        Contraseña:
-                                        <input
-                                            disabled={(Person?.id_role === 2) ? true : false}
-                                            style={{ borderColor: (errors.password) && color.Secondary }}
-                                            type={'text'}
-                                            {...register("password", {
-                                                required: { value: (isPasswordDefined) ? true : false, message: 'campo requerido' }
-                                            })}
+                                        Empresa:
+                                        <Select
+                                            isDisabled={true}
+                                            className='select'
+                                            styles={{ dropdownIndicator: () => ({ display: 'none' }), indicatorSeparator: () => ({ display: 'none' }), ...customStyles }}
+                                            value={{ value: Person?.id_enterprice, label: Person?.enterpriceShortName }}
                                         />
-                                        <p> {errors.password && errors.password.message} </p>
                                     </label>
-                                    :
-                                    <label></label>
-                            }
-                        </div>
-
-                        <div className='containerInput'>
-                            {
-                                !isPasswordDefined && Person?.id_role !== 2 &&
-                                <div className='containerBtn marL1 marR1'>
-                                    <button onClick={() => setisRestoralPassword(true)} type='button' className='btn'>RESTABLECER CONTRASEÑA</button>
+                                    <label>
+                                        Rol:
+                                        <Select
+                                            isDisabled={true}
+                                            className='select'
+                                            styles={{ dropdownIndicator: () => ({ display: 'none' }), indicatorSeparator: () => ({ display: 'none' }), ...customStyles }}
+                                            value={{ value: Person?.id_role, label: GetGeneral?.Roles.find(f => f.id_role === Person?.id_role)?.name }}
+                                        />
+                                    </label>
                                 </div>
-                            }
-                            <div className='containerBtn marL1 marR1'>
-                                <input id='btn2' className='btn' type="submit" value="ATUALIZAR" />
+                                <div className='photo-container'>
+                                    {(urlFile)
+                                        ? <img className='photo' src={urlFile} alt="img" />
+                                        : <Icon path={IconUser} className='photo' size={'180px'} />}
+                                    {/* {(Person) && (directory.isSuccess) ? <img className='photo' src={`${baseUrl}/files/getImg?type=Person&id=${Person?.id_person}&img=${directory.data.files[0]}`} alt="img" /> : <Icon path={IconUser} className='photo' size={'180px'} />} */}
+                                </div>
                             </div>
-                        </div>
-                    </>
-            }
-        </form>
+                            <div className='containerInput'>
+                                <label>
+                                    Nombre(s):
+                                    <input
+                                        style={{ borderColor: (errors.name) && color.Secondary }}
+                                        type={'text'}
+                                        {...register("name", {
+                                            required: { value: true, message: 'campo requerido' },
+                                            maxLength: { value: 30, message: 'El nombre no debe exeder los 30 caracteres' },
+                                            pattern: { value: /[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+[A-Za-z \d*\0-9*]+$/g, message: 'Solo caracteres del alfabeto y números' }
+                                        })}
+                                    />
+                                    <p> {errors.name && errors.name.message} </p>
+                                </label>
+                                <label>
+                                    Apellidos:
+                                    <input
+                                        style={{ borderColor: (errors.lastname) && color.Secondary }}
+                                        type={'text'}
+                                        {...register("lastname", {
+                                            required: { value: true, message: 'campo requerido' },
+                                            maxLength: { value: 50, message: 'El nombre no debe exeder los 50 caracteres' },
+                                            pattern: { value: /[a-zA-ZñÑáéíóúÁÉÍÓÚ\s\A-Za-z \d*\0-9*]+$/g, message: 'Solo caracteres del alfabeto y números' }
+                                        })}
+                                    />
+                                    <p> {errors.lastname && errors.lastname.message} </p>
+                                </label>
+                            </div>
+
+                            <div className='containerInput'>
+                                <label>
+                                    Correo:
+                                    <input
+                                        disabled={(Person?.id_role === 2) ? true : false}
+                                        style={{ borderColor: (errors.email) && color.Secondary }}
+                                        type={'email'}
+                                        {...register("email", {
+                                            maxLength: { value: 50, message: 'El nombre no debe exeder los 50 caracteres' },
+                                        })}
+                                    />
+                                    <p> {errors.email && errors.email.message} </p>
+                                </label>
+                                <label>
+                                    Usuario:
+                                    <input
+                                        disabled={(Person?.id_role === 2) ? true : false}
+                                        style={{ borderColor: (errors.user) && color.Secondary }}
+                                        type={'text'}
+                                        {...register("user", {
+                                            maxLength: { value: 40, message: 'El nombre no debe exeder los 40 caracteres' },
+                                        })}
+                                    />
+                                    <p> {errors.user && errors.user.message} </p>
+                                </label>
+                            </div>
+
+                            <div className='containerInput'>
+                                <label>
+                                    Número de empleado:
+                                    <input
+                                        style={{ borderColor: (errors.employeeNumber) && color.Secondary }}
+                                        type={'text'}
+                                        {...register("employeeNumber", {
+                                            required: { value: true, message: 'campo requerido' },
+                                            maxLength: { value: 20, message: 'El nombre no debe exeder los 20 caracteres' },
+                                        })}
+                                    />
+                                    <p> {errors.employeeNumber && errors.employeeNumber.message} </p>
+                                </label>
+                                <label>
+                                    Número teléfonico:
+                                    <input
+                                        autoComplete='off'
+                                        style={{ borderColor: (errors.phoneNumber) && color.Secondary }}
+                                        type={'number'}
+                                        {...register("phoneNumber", {
+                                            minLength: { value: 10, message: 'Número de 10 digitos' },
+                                            maxLength: {
+                                                value: 10,
+                                                message: "El número teléfonico debe contener 10 digitos"
+                                            },
+                                        })}
+                                    />
+                                    <p> {errors.phoneNumber && errors.phoneNumber.message} </p>
+                                </label>
+                            </div>
+
+                            <div className='containerInput'>
+                                {Person?.id_role !== 2 && <Switch value={(Person?.id_role === 2) ? true : isPasswordDefined} text='Cambiar contraseña' func={setisPasswordDefined} />}
+                                {
+                                    isPasswordDefined ? Person?.id_role !== 2 &&
+                                        <label>
+                                            Contraseña:
+                                            <input
+                                                disabled={(Person?.id_role === 2) ? true : false}
+                                                style={{ borderColor: (errors.password) && color.Secondary }}
+                                                type={'text'}
+                                                {...register("password", {
+                                                    required: { value: (isPasswordDefined) ? true : false, message: 'campo requerido' }
+                                                })}
+                                            />
+                                            <p> {errors.password && errors.password.message}</p>
+                                        </label>
+                                        :
+                                        <label></label>
+                                }
+                            </div>
+
+                            <div className='containerInput'>
+                                {
+                                    !isPasswordDefined && Person?.id_role !== 2 &&
+                                    <div className='containerBtn marL1 marR1'>
+                                        <button onClick={() => setisRestoralPassword(true)} type='button' className='btn'>RESTABLECER CONTRASEÑA</button>
+                                    </div>
+                                }
+                                {/* <div className='containerBtn marL1 marR1'>
+                                <input id='btn2' className='btn' type="submit" value="ATUALIZAR" />
+                            </div> */}
+                                <div className='containerBtn'>
+                                    <i className='iconBtn' onClick={() => sendFile()}><Icon path={IconEditPhoto} size={'4rem'} /></i>
+                                    <i className='iconBtn' onClick={handleSubmit(onSubmit)}><Icon path={IconRefresh} size={'4rem'} /></i>
+                                </div>
+                            </div>
+                        </>
+                }
+            </form>
+        </>
     )
 }

@@ -115,6 +115,7 @@
                     color: $Primary-Dark;
 
                     .folio {
+                        position: relative;
                         width: calc(100% - 10px);
                         overflow: auto;
                         padding: 10px;
@@ -136,8 +137,10 @@
                             justify-content: center;
                             position: relative;
                             height: 120px;
+                            margin-right: 50px;
 
                             li {
+
                                 b {
                                     font-size: 1.1rem;
                                 }
@@ -179,6 +182,32 @@
                                 b {
                                     font-size: 1.3rem;
                                 }
+                            }
+                        }
+
+                        .icon-photos {
+                            position: absolute;
+                            right: 5px;
+                            top: 5px;
+                        }
+
+                        .container-img {
+                            background-color: $background;
+                            margin-top: 10px;
+                            border-radius: 10px;
+                            height: calc(100% - 50px);
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+
+                            img {
+                                border-radius: 10px;
+                                margin: 5px;
+                                height: 90%;
+                                border: 1px solid $Primary;
+                                object-fit: contain;
+                                object-position: center top;
+                                margin-bottom: 5px;
                             }
                         }
                     }

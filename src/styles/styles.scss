@@ -399,29 +399,33 @@
                 border-radius: 50%;
                 box-shadow: 2px 1px 3px 3px rgba(0, 47, 108, 0.2);
                 cursor: pointer;
-                fill: $Primary-Dark;
 
                 &:hover {
                     transition: all .4s ease;
                     background-color: $Primary-Dark;
-                    fill: $background;
+                    color: $background;
                 }
             }
 
             .icon2 {
                 @extend .icon;
                 border: 1px solid $Missing;
-                fill: rgb(134, 134, 134);
+                color: rgb(134, 134, 134);
 
                 &:hover {
                     background-color: $background;
-                    fill: rgb(134, 134, 134);
+                    color: rgb(134, 134, 134);
                 }
             }
         }
     }
 }
 
+#preview {
+    height: 500px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
 
 //---
 
@@ -487,6 +491,20 @@
         background-color: $background;
         color: $Primary-Dark;
         font-weight: 500;
+    }
+}
+
+.iconBtn {
+    transition-duration: .5s;
+    color: $Primary-Dark;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    cursor: pointer;
+
+    &:hover {
+        transition-duration: .5s;
+        background-color: darken($color: $background, $amount: 10);
+        border-radius: 10px;
     }
 }
 
@@ -756,6 +774,25 @@
             }
         }
 
+        .photo-container {
+            width: 50%;
+            display: flex;
+            justify-content: center;
+
+            .photo {
+                border: 1px solid $Primary-Dark;
+                border-radius: 50%;
+                width: 180px;
+                height: 180px;
+                border-radius: 50%;
+                border: 1px solid $Primary;
+                object-fit: cover;
+                object-position: center top;
+                margin-bottom: 5px;
+
+            }
+        }
+
         .containerInput {
             display: flex;
             width: 100%;
@@ -804,21 +841,26 @@
 
     .nav-container {
         width: 250px;
+        font-size: 10px;
+
+        .header {
+            height: 300px;
+        }
 
         .body {
-            nav {
-                ul {
-                    .item {
-                        height: 40px;
-                        font-size: 1rem;
+            height: calc(100% - 360px);
 
-                        .icon {
-                            width: 1.7rem;
-                            height: 1.7rem;
-                        }
-                    }
+            .icon {
+                width: 1.5rem;
+                height: 1.5rem;
+            }
+
+            ul {
+                .item {
+                    height: 40px;
                 }
             }
+
         }
     }
 

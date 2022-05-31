@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { DisponibleTechnicals, AccountsMW, getService, GetVerification, updateService, updateTechnicals } from '../api/Api';
+import { DisponibleTechnicals, AccountsMW, getService, GetVerification, updateService, updateTechnicals, getDirectory } from '../api/Api';
 import { ShowAlert, ShowError, ShowMessage, ShowServiceValidate, ShowMessage2, SendValidate } from './Swal';
 import { ServiceSelected, Account, Technical, Services, PropsUpdateService, PropsBinnacle, TechnicalInfo } from '../rules/interfaces';
 import { validateUsers, validateZones, errorFormat } from '../functions/Functions';
@@ -31,6 +31,7 @@ export const ModalService = ({ Service, setService }: Props) => {
     const [selectedTechnical, setselectedTechnical] = useState<Technical | undefined>(undefined);
     const [AddTechnical, seAddTechnical] = useState<boolean>(false);
     const [technicals, settechnicals] = useState<Array<string>>([]);
+    const [files, setfiles] = useState<Array<string>>([]);
     const color: string = Colors.SecondaryDark;
 
     const showError = async (error: string) => {
@@ -47,6 +48,16 @@ export const ModalService = ({ Service, setService }: Props) => {
         }
     }
 
+    const directory = useMutation('directory', getDirectory, {
+        retry: false,
+        onError: error => {
+            ShowMessage({ title: 'Error', text: `${error}`, icon: 'error', });
+        },
+        onSuccess: ({ files }) => {
+            setfiles(files);
+        }
+    });
+
     const { refetch, isLoading } = useQuery(["Service"], () => getService((Service) ? Service.id_service : ''),
         {
             enabled: (Service) ? true : false,
@@ -54,6 +65,8 @@ export const ModalService = ({ Service, setService }: Props) => {
             refetchInterval: false,
             onSuccess: data => {
                 setservice(() => data);
+                if (data.service.filesCron === 'going up') directory.mutate({ id: data.service.id_service, type: 'Service' });
+                else setfiles([]);
                 queryClient.invalidateQueries(['serviceActive']);
             },
             onError: async error => await showError(`${error}`)
@@ -296,7 +309,7 @@ export const ModalService = ({ Service, setService }: Props) => {
                                 </div>
                                 <section>
                                     <article className='top'>
-                                        <Folio Account={Account} service={service} updateServiceMutate={updateServiceMutate} key='Folio' />
+                                        <Folio Account={Account} service={service} updateServiceMutate={updateServiceMutate} files={files} key='Folio' />
                                         {
                                             (service?.service.isTimeExpired)
                                                 ? <Time service={service} updateServiceMutate={updateServiceMutate} key='MoreTime' />

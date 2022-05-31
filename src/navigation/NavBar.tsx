@@ -10,11 +10,12 @@ import { mdiAccountSupervisor as IconPersons } from '@mdi/js';
 import { mdiAccountPlus as IconPersonAdd } from '@mdi/js';
 import { mdiServer as IconEnterprice } from '@mdi/js';
 import { mdiAccount as Logo } from '@mdi/js';
+import { baseUrl } from '../api/Api';
 
 
 export const NavBar = () => {
     const [IsOpen, setIsOpen] = useState<boolean>(false);
-    const { person, logOut } = useContext(AuthContext);
+    const { person, logOut, file } = useContext(AuthContext);
 
     return (
         <section className='nav-container' id="nav">
@@ -22,12 +23,12 @@ export const NavBar = () => {
                 <p className='nav-title1'>{person?.enterpriceShortName}</p>
                 <div className='nav-container-img'>
                     {
-                        (person?.id_role === 4)
+                        (person?.id_role === 4 || file === undefined)
                             ?
                             <Icon path={Logo} className='img-mon' style={{}} />
                             :
                             <img
-                                src={`https://pem-sa.ddns.me/assets/personal/${(person?.nameUser) ? person.nameUser : `${person?.personName} ${person?.lastname}`}.jpg`}
+                                src={`${baseUrl}/files/getImg?type=Person&id=${person?.id_person}&img=${file}`}
                                 className='img-mon'
                                 alt="imagen" />
                     }
@@ -45,36 +46,36 @@ export const NavBar = () => {
             <div className='body invisible-scrollbar'>
                 <ul>
                     <NavLink to="/home" className={({ isActive }) => `sinLinea ${isActive ? 'item-selected' : 'item'}`} onClick={() => setIsOpen(true)}>
-                        <Icon path={IconHome} className='icon marL1 marR1' /> HOME
+                        <Icon path={IconHome} className='icon marL1 marR1' /> <p>HOME</p>
                     </NavLink>
 
                     {
                         (person?.id_role !== 3 && person?.id_role !== 2) &&
                         <NavLink to="/enterprice" className={({ isActive }) => `sinLinea ${isActive ? 'item-selected' : 'item'}`} onClick={() => setIsOpen(true)} >
-                            <Icon path={IconEnterprice} className='icon marL1 marR1' /> EMPRESAS
+                            <Icon path={IconEnterprice} className='icon marL1 marR1' /> <p>EMPRESAS</p>
                         </NavLink>
                     }
                     {
                         (person?.id_role !== 3) &&
                         <NavLink to="/new-service" className={({ isActive }) => `sinLinea ${isActive ? 'item-selected' : 'item'}`} onClick={() => setIsOpen(true)} >
-                            <Icon path={IconNewService} className='icon marL1 marR1' /> NUEVO SERVICIO
+                            <Icon path={IconNewService} className='icon marL1 marR1' /> <p> NUEVO SERVICIO</p>
                         </NavLink>
                     }
 
                     <NavLink to="/give-folio" className={({ isActive }) => `sinLinea ${isActive ? 'item-selected' : 'item'}`} onClick={() => setIsOpen(true)} >
-                        <Icon path={IconActiveService} className='icon marL1 marR1' /> SERVICIOS ACTIVOS
+                        <Icon path={IconActiveService} className='icon marL1 marR1' /> <p> SERVICIOS ACTIVOS</p>
                     </NavLink>
                     {
                         (person?.id_role !== 2) &&
                         <NavLink to="/add-person" className={({ isActive }) => `sinLinea ${isActive ? 'item-selected' : 'item'}`} onClick={() => setIsOpen(true)} >
-                            <Icon path={IconPersonAdd} className='icon marL1 marR1' /> {(person?.id_role === 3) ? 'AGREGAR TÉCNICOS' : 'AGREGAR PERSONAL'}
+                            <Icon path={IconPersonAdd} className='icon marL1 marR1' /> <p>{(person?.id_role === 3) ? 'AGREGAR TÉCNICOS' : 'AGREGAR PERSONAL'}</p>
                         </NavLink>
                     }
 
                     {
                         (person?.id_role === 4 || person?.id_role === 3) &&
                         < NavLink to="/person" className={({ isActive }) => `sinLinea ${isActive ? 'item-selected' : 'item'}`} onClick={() => setIsOpen(true)}>
-                            <Icon path={IconPersons} className='icon marL1 marR1' />  {(person.id_role === 3) ? 'TÉCNICOS' : 'PERSONAL'}
+                            <Icon path={IconPersons} className='icon marL1 marR1' /> <p>{(person.id_role === 3) ? 'TÉCNICOS' : 'PERSONAL'}</p>
                         </NavLink>
                     }
                     <NavDropDown isOpen={IsOpen} setIsOpen={setIsOpen} />

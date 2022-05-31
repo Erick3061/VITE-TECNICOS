@@ -3,7 +3,7 @@ import { AuthState, Person } from '../rules/interfaces';
 import { AuthContextProps } from '../types/types';
 import { authReducer } from './authReducer';
 
-const estadoInicial: AuthState = { status: 'no-loged', person: null }
+const estadoInicial: AuthState = { status: 'no-loged', person: null, file: undefined }
 
 export const AuthContext = createContext({} as AuthContextProps);
 
@@ -11,14 +11,13 @@ export const AuthProvider = ({ children }: any) => {
     const [state, dispatch] = useReducer(authReducer, estadoInicial);
 
     const logStatus = () => {
-        console.log(state);
     }
 
-    const setPerson = (person: Person, token: string) => {
+    const setPerson = (person: Person, token: string, directory?: string) => {
         localStorage.setItem('token', token);
         dispatch({
             type: 'logIn',
-            payload: { person }
+            payload: { person, directory }
         })
     }
 

@@ -30,7 +30,7 @@ export const NavDropDown = ({ setIsOpen, isOpen }: props) => {
             setIsOpen(!isOpen);
         }}>
             <div className='dropDown'>
-                <Icon path={IconServices} className='icon marL1 marR1' /> SERVICIOS CULMINADOS
+                <Icon path={IconServices} className='icon marL1 marR1' /> <p>SERVICIOS CULMINADOS</p>
             </div>
 
             <div id='Drop' className='content'>

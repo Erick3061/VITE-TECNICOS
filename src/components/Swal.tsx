@@ -1,6 +1,6 @@
 import { UseMutationResult } from "react-query";
 import Swal, { SweetAlertIcon } from "sweetalert2";
-import { PropsUpdateService, Service, Technical } from "../rules/interfaces";
+import { PropsUpdateService, responseLoadFile, Service, Technical } from "../rules/interfaces";
 
 export const ShowError = async (error: string) => {
     return await Swal.fire({
@@ -167,5 +167,48 @@ export const SendValidate = async ({ mutate, data }: PropsFunctionServiceValidat
         if (isConfirmed) {
             mutate.mutate({ ...rest, value: { comment: value } });
         }
+    });
+}
+
+interface SendFile {
+    mutate: UseMutationResult<responseLoadFile, unknown, { file: FormData; id: string; type: string; }, unknown>;
+    id: string;
+    type: string;
+    rol: string;
+}
+
+export const SendFile = async ({ rol, id, mutate, type }: SendFile) => {
+    await Swal.fire({
+        input: 'file',
+        inputLabel: `Seleccione la foto de el ${rol}`,
+        inputPlaceholder: 'Escribe tu comentario aqui...',
+        inputAttributes: {
+            'aria-label': 'Type your message here'
+        },
+        showCancelButton: true,
+        cancelButtonColor: '#b20010',
+        confirmButtonColor: '#002f6c',
+        confirmButtonText: 'Continuar',
+        color: '#002f6c',
+        allowOutsideClick: false,
+    }).then(({ value, isConfirmed }) => {
+        if (isConfirmed) {
+            const formData = new FormData();
+            formData.append('file', value);
+            mutate.mutate({ file: formData, id, type });
+        }
+    });
+}
+
+export const ViewImg = async (path: string) => {
+    await Swal.fire({
+        width: 'auto',
+        confirmButtonColor: '#002f6c',
+        confirmButtonText: 'cerrar',
+        color: '#002f6c',
+        title: 'IMÁGEN',
+        html: `
+                <img id="preview" src="${path}">
+            `,
     });
 }

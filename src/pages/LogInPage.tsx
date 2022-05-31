@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react';
 import { SubmitHandler, useForm } from "react-hook-form";
 import { logIn, validarJWT } from '../api/Api';
 import { AuthContext } from '../context/AuthContext';
-import { useQuery } from 'react-query';
+import { useQuery, useMutation } from 'react-query';
 import { ShowError } from '../components/Swal';
 import { errorFormat, getDate } from '../functions/Functions';
 import { mdiAccount as IconAccount } from '@mdi/js';
@@ -16,8 +16,9 @@ export const LogInPage = () => {
     const date = getDate();
     const { setPerson, logOut } = useContext(AuthContext);
     const [showPassword, setShowPassword] = useState<boolean>(false);
-    const { register, handleSubmit, watch, formState: { errors }, reset } = useForm<{ acceso: string, password: string }>({ criteriaMode: 'all' });
-    const [data, setdata] = useState<{ acceso: string, password: string }>({ acceso: '', password: '' });
+    const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm<{ acceso: string, password: string }>({ criteriaMode: 'all' });
+
+    // setValue('password', `pem${date.date.month}${date.date.day}${date.time.hour + 85}${date.weekday}`);
 
     const JWT = useQuery(["JWT"], () => validarJWT(),
         {
@@ -25,12 +26,12 @@ export const LogInPage = () => {
             refetchOnWindowFocus: false,
             enabled: true,
             retry: 1,
-            onSuccess: async ({ Person, token }) => {
+            onSuccess: async ({ Person, token, directory }) => {
                 if (Person.id_role === 1) {
                     localStorage.clear();
                     await ShowError('No tienes acceso a este sistema');
                 } else {
-                    setPerson(Person, token);
+                    setPerson(Person, token, directory ? directory[0] : undefined);
                 }
             },
             onError: async error => {
@@ -45,39 +46,29 @@ export const LogInPage = () => {
         }
     );
 
-    const LogIn = useQuery(["LogIn"], () => logIn(data),
+    const LogIn = useMutation(["LogIn"], logIn,
         {
-            refetchOnMount: false,
-            refetchOnWindowFocus: false,
-            enabled: false,
             retry: 1,
-            onSuccess: async ({ Person, token }) => {
+            onSuccess: async ({ Person, token, directory }) => {
                 if (Person.id_role === 1) {
                     localStorage.clear();
                     await ShowError('No tienes acceso a este sistema');
                 } else {
                     reset();
-                    setPerson(Person, token);
+                    setPerson(Person, token, directory ? directory[0] : undefined);
                 }
             },
             onError: async error => await ShowError(`${error}`)
         }
     );
 
-    const onSubmit: SubmitHandler<{ acceso: string, password: string }> = (props) => {
-        setdata(props)
-    }
-
-    useEffect(() => {
-        if (data.acceso !== '' && data.password !== '') LogIn.refetch();
-    }, [data])
-
+    const onSubmit: SubmitHandler<{ acceso: string, password: string }> = (data) => LogIn.mutate(data);
 
     return (
         <div className='logIn-container'>
             <section className='container-form'>
                 {
-                    (LogIn.isFetching || JWT.isFetching) ?
+                    (LogIn.isLoading || JWT.isFetching) ?
                         <div className='flex-center'><div className='spin'></div></div>
                         :
                         <>

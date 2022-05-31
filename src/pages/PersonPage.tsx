@@ -14,6 +14,8 @@ import { mdiDelete as IconDelete } from '@mdi/js';
 import { mdiPencil as IconEdit } from '@mdi/js';
 import { mdiLightbulbOn as IconPersonActive } from '@mdi/js';
 import { mdiLightbulbVariantOutline as IconPersonInactive } from '@mdi/js';
+import { mdiRefresh as IconRefresh } from '@mdi/js';
+import { mdiLoading as IconLoading } from '@mdi/js';
 
 export const PersonPage = () => {
     const { logOut, person } = useContext(AuthContext);
@@ -39,6 +41,7 @@ export const PersonPage = () => {
                 : setSearch(filtrado?.filter(el => (el.enterpriceShortName.toLowerCase().includes(txt.toLowerCase()))));
         if (txt.toLowerCase() === '') setSearch(filtrado);
     }
+
     const setFiltrado = () => {
         if (filtro === 'All') {
             setfiltrado(() => persons?.filter(p => p))
@@ -77,7 +80,10 @@ export const PersonPage = () => {
 
     const Persons = useQuery('Persons', () => AllPersonal((person?.id_role === 3) ? true : undefined), {
         refetchOnReconnect: false,
+        refetchOnWindowFocus: false,
         onSuccess: data => {
+            const person = data.Persons.find(p => p.id_person === Person?.id_person);
+            if (person) setPerson(person);
             setfiltrado(() => data.Persons);
             setpersons(() => data.Persons);
         },
@@ -179,6 +185,13 @@ export const PersonPage = () => {
                         <div className={(filtro === 'Inactives') ? 'btnFilterActive' : 'btnFilter'} onClick={() => setfiltro(() => 'Inactives')} >Inactivos</div>
                     </div>
                 </div>
+                <div className='containerCalendar'>
+                    <div className='btns'>
+                        <div className='containerIcon'>
+                            {(Persons.isFetching) ? <i> <Icon spin path={IconLoading} className='icon' /> </i> : <i onClick={() => Persons.refetch()} > <Icon path={IconRefresh} className='icon' /> </i>}
+                        </div>
+                    </div>
+                </div>
             </header>
             <main className='main'>
                 <section className='container-table m0'>
@@ -260,19 +273,12 @@ export const PersonPage = () => {
                                                                 onClick={() => {
                                                                     if (el.status === 'ACTIVO') {
                                                                         const modal = document.querySelector('.Modal');
-                                                                        if (modal) {
-                                                                            modal.setAttribute('style', 'display: block');
-                                                                        }
+                                                                        if (modal) modal.setAttribute('style', 'display: block');
                                                                         setPerson(() => el);
-                                                                    } else {
-                                                                        ShowMessage({ text: 'Para editar la información, esta persona debe estar activa', title: 'Persona inactiva', icon: 'warning' })
-                                                                    }
+                                                                    } else ShowMessage({ text: 'Para editar la información, esta persona debe estar activa', title: 'Persona inactiva', icon: 'warning' })
+
                                                                 }}
-                                                            >
-                                                                <Icon path={IconEdit}
-                                                                    className='iconaction'
-                                                                />
-                                                            </i>
+                                                            > <Icon path={IconEdit} className='iconaction' /> </i>
                                                             <i
                                                                 onClick={async () => {
                                                                     await ShowMessage2({
@@ -292,11 +298,7 @@ export const PersonPage = () => {
                                                                         })
                                                                     });
                                                                 }}
-                                                            >
-
-                                                                <Icon path={IconDelete} className='iconaction'
-                                                                />
-                                                            </i>
+                                                            > <Icon path={IconDelete} className='iconaction' />  </i>
                                                         </td>
                                                     </tr>
                                                 );
