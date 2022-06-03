@@ -301,7 +301,7 @@ export const FormEditPerson = ({ onSubmit, isLoading, isPasswordDefined, setisPa
         retry: false,
         onError: error => {
             seturlFile(undefined);
-            if (`${error}`.toLowerCase().includes('no such file or directory')) {
+            if (`${error}`.toLowerCase().includes('directorio no existe')) {
                 return ShowMessage2({ title: 'No existe imagen de usuario', text: '¿Quieres agregarla?', icon: 'warning', func: () => sendFile() })
             }
             ShowMessage({ title: 'Error', text: `${error}`, icon: 'error', });

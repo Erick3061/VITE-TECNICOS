@@ -51,7 +51,10 @@ export const ModalService = ({ Service, setService }: Props) => {
     const directory = useMutation('directory', getDirectory, {
         retry: false,
         onError: error => {
-            ShowMessage({ title: 'Error', text: `${error}`, icon: 'error', });
+            if (service?.service.filesCron === 'going up') {
+                return;
+            }
+            ShowMessage({ title: 'Error', text: `${error}`, icon: 'warning', });
         },
         onSuccess: ({ files }) => {
             setfiles(files);
