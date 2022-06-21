@@ -4,7 +4,7 @@ import { PropsUpdateService, Service, ServiceSelected, Technical } from '../../r
 import { useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { Timepicker } from '../DatePicker';
-import { formatDate } from '../../functions/Functions';
+import { formatDate, time } from '../../functions/Functions';
 import { ShowError } from '../Swal';
 interface props {
     updateServiceMutate: UseMutationResult<{
@@ -38,7 +38,7 @@ export const Time = ({ updateServiceMutate, service }: props) => {
                             className='btn2'
                             onClick={async () => {
                                 if (date !== null) {
-                                    if (date.time.second === 0) return await ShowError(`Debes agregar al menos un minuto`);
+                                    if (date.time.minute === 0 && date.time.second === 0) return await ShowError(`Debes agregar al menos un minuto`);
                                     updateServiceMutate.mutate({
                                         id_service: service!.service.id_service,
                                         person: { id: person!.id_person, role: person!.id_role, name: `${person?.personName} ${person?.lastname}` },

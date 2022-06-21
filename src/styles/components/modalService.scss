@@ -39,10 +39,6 @@
             width: 95%;
             height: 95%;
             border-radius: 10px;
-            -webkit-animation-name: open-top;
-            -webkit-animation-duration: 0.5s;
-            animation-name: open-top;
-            animation-duration: 0.5s;
 
             .header {
                 position: relative;
@@ -72,18 +68,12 @@
 
                 .container-cuadro {
                     display: inline-flex;
-                    flex-direction: column;
-                    position: relative;
                     justify-content: center;
                     align-items: center;
                     width: 40px;
                     height: 40px;
-                    margin-left: 5px;
-                    margin-right: 5px;
-                    margin-top: 5px;
-                    margin-bottom: 5px;
+                    margin: 5px 5px;
                     border-radius: 10px;
-                    border: 0px;
 
                     .cuadro {
                         color: $background;
@@ -116,52 +106,49 @@
 
                     .folio {
                         position: relative;
-                        width: calc(100% - 10px);
+                        width: 100%;
                         overflow: auto;
                         padding: 10px;
-                        // border: 1px solid $Primary-Dark;
                         background-color: darken($color: $background, $amount: 7);
                         border-radius: 10px;
-                        margin-left: 10px;
-                        margin-right: 5px;
-                        margin-top: 10px;
-
+                        margin: 10px 10px;
+                        
                         h3 {
-                            height: 20px;
+                            margin-right: 30px;
+                            height: 30px;
                             text-align: center;
                         }
-
+                        
                         ul {
                             display: flex;
                             flex-direction: column;
                             justify-content: center;
                             position: relative;
                             height: 120px;
-                            margin-right: 50px;
-
+                            margin-right: 30px;
+                            
                             li {
-
+                                
                                 b {
                                     font-size: 1.1rem;
                                 }
-
+                                
                                 padding-top: 5px;
                                 font-size: $p-3;
                             }
-
+                            
                         }
-
+                        
                         div {
                             display: flex;
                             width: 100%;
-                            height: 110px;
+                            height: auto;
                             justify-content: center;
-
+                            
                             .container-folio {
-                                display: inline-flex;
+                                display: flex;
                                 flex-direction: column;
-                                align-items: center;
-
+                                
                                 p {
                                     padding-top: 5px;
                                     color: $Primary-Dark;
@@ -172,65 +159,67 @@
                                     padding-top: 5px;
                                     font-size: 1.5rem;
                                 }
-                            }
 
+                                .btn2{
+                                    margin: 10px auto;
+                                }
+                            }
+                            
                             .container-ver-claves {
                                 display: inline-flex;
                                 flex-direction: column;
                                 align-items: center;
-
+                                
                                 b {
                                     font-size: 1.3rem;
                                 }
                             }
                         }
-
+                        
                         .icon-photos {
                             position: absolute;
                             right: 5px;
                             top: 5px;
                         }
                     }
-
+                    
                     .technicals {
                         width: calc(100% - 10px);
                         overflow: auto;
                         padding: 10px;
                         background-color: darken($color: $background, $amount: 7);
                         border-radius: 10px;
-                        margin-left: 5px;
-                        margin-right: 10px;
-                        margin-top: 10px;
-
+                        margin: 10px 10px;
+                        
                         .title {
                             height: 50px;
                             font-size: 1.7rem;
                         }
-
+                        
                         .moreTime {
                             width: 100%;
                             height: calc(100% - 50px);
                             display: flex;
                             align-items: center;
                             justify-content: space-evenly;
-
+                            
                             .containerTime {
                                 background-color: darken($color: $background, $amount: 10);
-                                padding: 10px;
                                 border-radius: 10px;
-
+                                padding: 10px;
+                                
                                 .title {
                                     height: min-content;
                                     padding-bottom: 10px;
                                     font-size: 1.2rem;
                                 }
-
+                                
                                 .time {
                                     display: flex;
                                     flex-direction: column;
                                     align-items: center;
-
-
+                                    
+                                    
                                     .btn2 {
                                         margin-top: 10px;
                                         color: $background;
@@ -243,7 +232,7 @@
                                     * {
                                         color: $Primary-Dark;
                                     }
-
+                                    
                                     label {
                                         margin-bottom: -20px;
                                         font-size: 1.2rem;
@@ -251,11 +240,8 @@
                                         text-align: center;
                                         font-weight: 600;
                                     }
-
+                                    
                                     input {
-                                        margin-left: 5px;
-                                        margin-right: 5px;
-                                        border-radius: 10px;
                                         text-align: center;
                                         font-size: 2rem;
                                         font-weight: 600;
@@ -264,14 +250,14 @@
                                 }
                             }
                         }
-
+                        
                         .btn2 {
                             margin: 0px;
                             height: 50px;
                             font-size: 1.4rem;
                             font-weight: bold;
                         }
-
+                        
                         .float-btn {
                             position: absolute;
                             width: 50px;
@@ -306,7 +292,7 @@
                         .container-list {
                             position: relative;
                             height: 240px;
-
+                            
                             div {
                                 border: 1px solid $Primary-Dark;
                                 background-color: darken($color: $background, $amount: 0);
@@ -671,14 +657,9 @@
                             width: calc(50% - 10px);
                             overflow: auto;
                             padding: 10px;
-                            // border: 1px solid $Primary-Dark;
                             background-color: darken($color: $background, $amount: 7);
                             border-radius: 10px;
-                            margin-left: 10px;
-                            margin-right: 10px;
-                            margin-top: 10px;
-                            margin-bottom: 20px;
-
+                            margin: 10px 10px;
                         }
                     }
                 }
@@ -707,14 +688,6 @@
                 }
             }
 
-
-            &::after {
-                -webkit-animation-name: close-left;
-                -webkit-animation-duration: 5s;
-                animation-name: close-left;
-                animation-duration: 5s;
-            }
-
             transition: all .4s;
         }
 
@@ -722,27 +695,5 @@
             width: 50%;
             height: min-content;
         }
-    }
-}
-
-@-webkit-keyframes open-top {
-    from {
-        top: 0px;
-        opacity: 0;
-    }
-
-    to {
-        top: 0;
-    }
-}
-
-@keyframes open-top {
-    from {
-        top: 0px;
-        opacity: 0;
-    }
-
-    to {
-        top: 0;
     }
 }
