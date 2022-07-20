@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { UseMutationResult } from 'react-query';
+import { UseMutationResult } from '@tanstack/react-query';
 import { Account, PropsUpdateService, Service, ServiceSelected, Technical } from '../../rules/interfaces';
 import { ShowMessage, ViewImg } from '../Swal';
 import { Switch } from '../Switch';

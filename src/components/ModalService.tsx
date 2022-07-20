@@ -3,7 +3,7 @@ import { DisponibleTechnicals, AccountsMW, getService, GetVerification, updateSe
 import { ShowAlert, ShowError, ShowMessage, ShowServiceValidate, ShowMessage2, SendValidate } from './Swal';
 import { ServiceSelected, Account, Technical, Services, PropsUpdateService, PropsBinnacle, TechnicalInfo } from '../rules/interfaces';
 import { validateUsers, validateZones, errorFormat } from '../functions/Functions';
-import { useQuery, useQueryClient, useMutation } from 'react-query';
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import CountDownTimer from './CountDownTimer';
 import Select, { SingleValue } from 'react-select';
 import { AuthContext } from '../context/AuthContext';
@@ -48,7 +48,7 @@ export const ModalService = ({ Service, setService }: Props) => {
         }
     }
 
-    const directory = useMutation('directory', getDirectory, {
+    const directory = useMutation(['directory'], getDirectory, {
         retry: false,
         onError: error => {
             if (service?.service.filesCron === 'going up') {
@@ -61,7 +61,7 @@ export const ModalService = ({ Service, setService }: Props) => {
         }
     });
 
-    const { refetch, isLoading } = useQuery(["Service"], () => getService((Service) ? Service.id_service : ''),
+    const { refetch, isLoading } = useQuery(['Service'], () => getService((Service) ? Service.id_service : ''),
         {
             enabled: (Service) ? true : false,
             retry: 1,
@@ -96,7 +96,7 @@ export const ModalService = ({ Service, setService }: Props) => {
         onError: async error => await showError(`${error}`)
     });
 
-    const Technicals = useQuery('DisponibleTechnicals', () => DisponibleTechnicals(person?.id_role === 3 ? { id_enterprice: person.id_enterprice, shortName: person.enterpriceShortName, name: '' } : undefined), {
+    const Technicals = useQuery(['DisponibleTechnicals'], () => DisponibleTechnicals(person?.id_role === 3 ? { id_enterprice: person.id_enterprice, shortName: person.enterpriceShortName, name: '' } : undefined), {
         retry: 1,
         refetchOnWindowFocus: false,
         refetchInterval: false,

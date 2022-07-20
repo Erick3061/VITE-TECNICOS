@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { SubmitHandler, useForm } from "react-hook-form";
 import { logIn, validarJWT } from '../api/Api';
 import { AuthContext } from '../context/AuthContext';
-import { useQuery, useMutation } from 'react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { ShowError } from '../components/Swal';
 import { errorFormat, getDate } from '../functions/Functions';
 import { mdiAccount as IconAccount } from '@mdi/js';

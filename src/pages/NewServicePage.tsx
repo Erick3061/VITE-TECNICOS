@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { DisponibleTechnicals, addService } from '../api/Api';
 import Select, { SingleValue } from 'react-select';
 import { AuthContext } from '../context/AuthContext';
@@ -31,14 +31,14 @@ export const NewServicePage = () => {
     useEffect(() => {
         const data: { accounts: Array<Account> } | undefined = queryClient.getQueryData(["Accounts"]);
         if (data) setAccounts(() => data);
-        else queryClient.invalidateQueries('Accounts');
+        else queryClient.invalidateQueries(['Accounts']);
 
         const dataGeneral: { Enterprices: Enterprices[]; Roles: Roles[]; ServicesTypes: ServicesTypes[]; } | undefined = queryClient.getQueryData(["GetGeneral"]);
         if (dataGeneral) setGetGeneral(() => dataGeneral);
-        else queryClient.invalidateQueries('GetGeneral');
+        else queryClient.invalidateQueries(['GetGeneral']);
     }, []);
 
-    const Technicals = useQuery('DisponibleTechnicals', () => DisponibleTechnicals((enterpriceSelected?.value !== 0) ? GetGeneral?.Enterprices.find(e => e.id_enterprice === enterpriceSelected?.value) : undefined), {
+    const Technicals = useQuery(['DisponibleTechnicals'], () => DisponibleTechnicals((enterpriceSelected?.value !== 0) ? GetGeneral?.Enterprices.find(e => e.id_enterprice === enterpriceSelected?.value) : undefined), {
         retry: 1,
         refetchOnWindowFocus: false,
         refetchInterval: false,

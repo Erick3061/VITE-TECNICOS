@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { UseMutationResult } from 'react-query';
+import { UseMutationResult } from '@tanstack/react-query';
 import { PropsUpdateService, Service, ServiceSelected, Technical } from '../../rules/interfaces';
 import { useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';

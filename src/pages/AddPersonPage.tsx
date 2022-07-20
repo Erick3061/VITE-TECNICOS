@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SingleValue } from 'react-select';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { addPerson } from '../api/Api';

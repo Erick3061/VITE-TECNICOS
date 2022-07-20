@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Select, { GroupBase, SingleValue, StylesConfig } from 'react-select';
 import { getServices, validarJWT } from '../api/Api';
 import { formatDate, getDate, modDate } from '../functions/Functions';
@@ -31,7 +31,7 @@ export const ServicesAccountPage = () => {
     const [filtro, setfiltro] = useState<'Abonado' | 'Cliente' | 'Nombre'>('Abonado');
     const [Accounts, setAccounts] = useState<{ accounts: Array<Account> }>();
 
-    const { isSuccess, isLoading, refetch, isFetching, isFetched } = useQuery('Services', () => getServices({ start: start.date.date, end: end.date.date, account: accountSelected?.value }), {
+    const { isSuccess, isLoading, refetch, isFetching, isFetched } = useQuery(['Services'], () => getServices({ start: start.date.date, end: end.date.date, account: accountSelected?.value }), {
         enabled: false,
         refetchOnWindowFocus: false,
         onSuccess: data => {
@@ -60,7 +60,7 @@ export const ServicesAccountPage = () => {
 
     useEffect(() => {
         const acc: { accounts: Array<Account> } | undefined = queryClient.getQueryData(["Accounts"]);
-        (acc) ? setAccounts(() => acc) : queryClient.invalidateQueries('Accounts');
+        (acc) ? setAccounts(() => acc) : queryClient.invalidateQueries(['Accounts']);
     }, []);
 
     const customStyles: StylesConfig<{ value: string; label: string; }, false, GroupBase<{ value: string; label: string; }>> | undefined = {

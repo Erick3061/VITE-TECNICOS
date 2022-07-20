@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { QueryObserverResult, RefetchOptions, RefetchQueryFilters } from "react-query";
+import { QueryObserverResult, RefetchOptions, RefetchQueryFilters } from "@tanstack/react-query";
 import { getExpired } from '../functions/Functions';
 import { Service, Technical, ServiceSelected } from '../rules/interfaces';
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { actionPersonProps, Enterprices, Person, Roles, ServicesTypes } from '../rules/interfaces';
 import { AddPerson, FormEditPerson } from './Modal/FormPerson';
 import { SubmitHandler } from 'react-hook-form';
-import { useQueryClient, UseMutationResult, useQuery, useMutation } from 'react-query';
+import { useQueryClient, UseMutationResult, useQuery, useMutation } from '@tanstack/react-query';
 import { ShowMessage } from './Swal';
 import { getDirectory } from '../api/Api';
 
@@ -25,7 +25,7 @@ export const ModalEditPerson = ({ Person, setPerson, ActionPerson, isRestoralPas
     const close = (modal: Element | null) => {
         (modal) && modal.setAttribute('style', 'display: none');
         setPerson(undefined);
-        queryClient.removeQueries('directory');
+        queryClient.removeQueries(['directory']);
     }
 
     const onSubmit: SubmitHandler<AddPerson> = async (props) => {
@@ -74,7 +74,7 @@ export const ModalEditPerson = ({ Person, setPerson, ActionPerson, isRestoralPas
         if (Person) {
             const data: { Enterprices: Enterprices[]; Roles: Roles[]; ServicesTypes: ServicesTypes[]; } | undefined = queryClient.getQueryData(["GetGeneral"]);
             if (data) setGetGeneral(() => data);
-            else queryClient.invalidateQueries('GetGeneral');
+            else queryClient.invalidateQueries(['GetGeneral']);
             setisPasswordDefined(false);
         }
     }, [Person]);

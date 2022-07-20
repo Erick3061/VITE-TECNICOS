@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { baseUrl, getDirectory, getServiceWithDetails } from '../api/Api';
 import { Person, ServiceDetails, Services, TechnicalInfo } from '../rules/interfaces';
 import { ShowError, ShowMessage, ViewImg } from './Swal';
@@ -28,7 +28,7 @@ export const ModalDetailsService = ({ Service, setService }: props) => {
     const [isPhotos, setIsPhotos] = useState<boolean>(false);
 
 
-    const directory = useMutation('directory', getDirectory, {
+    const directory = useMutation(['directory'], getDirectory, {
         retry: false,
         onError: error => {
             ShowMessage({ title: 'Error', text: `${error}`, icon: 'error', });

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useQueryClient, useMutation } from 'react-query';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { Enterprices } from '../rules/interfaces';
 import Select, { GroupBase, SingleValue, StylesConfig } from 'react-select';
 import { color } from '../helpers/herpers';
@@ -29,14 +29,14 @@ export const EnterpricePage = () => {
     const [enterpriceSelected, setEnterpriceSelected] = useState<SingleValue<value>>(initialStateValueEnterprice);
     const [isLoading, setisLoading] = useState<boolean>(false);
 
-    const addEnterpriceM = useMutation('addEnterpriceM', addEnterprice, {
+    const addEnterpriceM = useMutation(['addEnterpriceM'], addEnterprice, {
         retry: 1,
         onMutate: () => {
             setisLoading(true);
         },
         onSuccess: async data => {
             setisLoading(false);
-            queryClient.invalidateQueries('GetGeneral');
+            queryClient.invalidateQueries(['GetGeneral']);
             await ShowMessage({ title: 'Correcto', text: 'Empresa insertada', icon: 'success' });
         },
         onError: err => {
@@ -45,14 +45,14 @@ export const EnterpricePage = () => {
         }
     });
 
-    const enterpriceActionsM = useMutation('enterpriceActionsM', enterpriceActions, {
+    const enterpriceActionsM = useMutation(['enterpriceActionsM'], enterpriceActions, {
         retry: 1,
         onMutate: () => {
             setisLoading(true);
         },
         onSuccess: async data => {
             setisLoading(false);
-            queryClient.invalidateQueries('GetGeneral');
+            queryClient.invalidateQueries(['GetGeneral']);
             if (data.isUpdated) {
                 await ShowMessage({ title: 'Correcto', text: 'Empresa actualizada', icon: 'success' });
             }
@@ -97,14 +97,14 @@ export const EnterpricePage = () => {
     useEffect(() => {
         const data: { Enterprices: Enterprices[]; } | undefined = queryClient.getQueryData(["GetGeneral"]);
         if (data) setEnterprices(() => data.Enterprices);
-        else queryClient.invalidateQueries('GetGeneral');
+        else queryClient.invalidateQueries(['GetGeneral']);
     }, []);
 
     useEffect(() => {
         setEnterpriceSelected(initialStateValueEnterprice);
         const data: { Enterprices: Enterprices[]; } | undefined = queryClient.getQueryData(["GetGeneral"]);
         if (data) setEnterprices(() => data.Enterprices);
-    }, [queryClient.getQueryData('GetGeneral')]);
+    }, [queryClient.getQueryData(['GetGeneral'])]);
 
     useEffect(() => {
         reset();
@@ -207,7 +207,7 @@ export const EnterpricePage = () => {
                 <section className='container-table'>
                     <h2>Empresas</h2>
                     {
-                        (queryClient.isFetching('GetGeneral') || isLoading)
+                        (queryClient.isFetching(['GetGeneral']) || isLoading)
                             ?
                             <div className='flex-center'>
                                 <div className='spin'></div>

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getServices } from '../api/Api';
 import { customStyles, formatDate, getDate, modDate } from '../functions/Functions';
 import { Person, Services } from '../rules/interfaces';
@@ -31,7 +31,7 @@ export const ServicesTechicalPage = () => {
     const [technicalSelected, settechnicalSelected] = useState<SingleValue<{ value: string; label: string; }>>(initialStateValueTechnical);
     const [Technicals, setTechnicals] = useState<{ Persons: Array<Person> }>();
 
-    const { isSuccess, isLoading, refetch, isFetching, isFetched } = useQuery('Services', () => getServices({ start: start.date.date, end: end.date.date, technical: technicalSelected?.value }), {
+    const { isSuccess, isLoading, refetch, isFetching, isFetched } = useQuery(['Services'], () => getServices({ start: start.date.date, end: end.date.date, technical: technicalSelected?.value }), {
         enabled: false,
         refetchOnWindowFocus: false,
         onSuccess: data => {
@@ -63,7 +63,7 @@ export const ServicesTechicalPage = () => {
         if (technicals) {
             setTechnicals(() => technicals);
         } else {
-            queryClient.invalidateQueries('Technicals');
+            queryClient.invalidateQueries(['Technicals']);
         }
     }, []);
 

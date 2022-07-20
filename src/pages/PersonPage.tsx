@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AllPersonal, personActions } from '../api/Api';
 import { ShowError, ShowMessage, ShowMessage2 } from '../components/Swal';
 import { useContext } from 'react';
@@ -78,7 +78,7 @@ export const PersonPage = () => {
         await ShowError(errorFormat(error));
     }
 
-    const Persons = useQuery('Persons', () => AllPersonal((person?.id_role === 3) ? true : undefined), {
+    const Persons = useQuery(['Persons'], () => AllPersonal((person?.id_role === 3) ? true : undefined), {
         refetchOnReconnect: false,
         refetchOnWindowFocus: false,
         onSuccess: data => {
@@ -90,7 +90,7 @@ export const PersonPage = () => {
         onError: async error => await showError(`${error}`),
     });
 
-    const ActionPerson = useMutation('ActionPerson', personActions, {
+    const ActionPerson = useMutation(['ActionPerson'], personActions, {
         retry: 1,
         onMutate: () => {
             setisLoading(true);
@@ -137,7 +137,7 @@ export const PersonPage = () => {
     useEffect(() => {
         const data: { Enterprices: Enterprices[]; Roles: Roles[]; ServicesTypes: ServicesTypes[]; } | undefined = queryClient.getQueryData(["GetGeneral"]);
         if (data) setGetGeneral(() => data);
-        else queryClient.invalidateQueries('GetGeneral');
+        else queryClient.invalidateQueries(['GetGeneral']);
     }, []);
 
 

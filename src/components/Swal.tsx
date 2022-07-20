@@ -1,4 +1,4 @@
-import { UseMutationResult } from "react-query";
+import { UseMutationResult } from "@tanstack/react-query";
 import Swal, { SweetAlertIcon } from "sweetalert2";
 import { PropsUpdateService, responseLoadFile, Service, Technical } from "../rules/interfaces";
 

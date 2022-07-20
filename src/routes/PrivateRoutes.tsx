@@ -5,7 +5,7 @@ import { AuthContext } from '../context/AuthContext';
 import { AccountsMW, AllTechnicals, getGeneral, getUsersMon } from '../api/Api';
 import { ShowError } from '../components/Swal';
 import { errorFormat } from '../functions/Functions';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { NavBar } from '../navigation/NavBar';
 import { NewServicePage } from '../pages/NewServicePage';
 import { GiveFolioPage } from '../pages/GiveFolioPage';
@@ -98,7 +98,7 @@ export const PrivateRoutes = () => {
     return (
         <div className='containerFull'>
             {
-                (Accounts.isLoading || Technicals.isLoading || GetGeneral.isLoading || GetUsersMon.isLoading)
+                (Accounts.isFetching || Technicals.isFetching || GetGeneral.isFetching || GetUsersMon.isFetching)
                     ? <div className='logIn-container'><div className='spin'></div></div>
                     :
                     (Accounts.isError || Technicals.isError || GetGeneral.isError || GetUsersMon.isError)

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { task } from '../api/Api';
 export const TasksPage = () => {
     const { isSuccess, data } = useQuery(['task'], () => task(), { retry: 1 });

@@ -1,5 +1,5 @@
 import React from 'react'
-import { UseQueryResult } from 'react-query';
+import { UseQueryResult } from '@tanstack/react-query';
 import { Account } from '../../rules/interfaces';
 interface props {
     Account: Account | undefined;

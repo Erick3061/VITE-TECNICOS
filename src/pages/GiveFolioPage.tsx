@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { activeServices } from '../api/Api';
 import Swal from 'sweetalert2';
 import { Account, Services } from '../rules/interfaces';
@@ -21,7 +21,7 @@ export const GiveFolioPage = () => {
     const [active, setactive] = useState<"Nombre" | "Digital" | "CodigoCte">('Nombre');
 
 
-    const { isSuccess, isLoading } = useQuery('serviceActive', () => activeServices(), {
+    const { isSuccess, isLoading } = useQuery(['serviceActive'], () => activeServices(), {
         onSuccess: data => {
             setfiltrado(() => data.services);
             setservices(() => data.services);
@@ -29,7 +29,7 @@ export const GiveFolioPage = () => {
             if (acc) {
                 setAccounts(() => acc.accounts);
             } else {
-                queryClient.invalidateQueries('Accounts');
+                queryClient.invalidateQueries(['Accounts']);
             }
         },
         onError: error => {

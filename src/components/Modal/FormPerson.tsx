@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { AuthContext } from '../../context/AuthContext';
 import Select, { SingleValue } from 'react-select';
 import { Enterprices, Person, Roles, ServicesTypes } from '../../rules/interfaces';
-import { useQueryClient, useMutation } from 'react-query';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { color } from '../../helpers/herpers';
 import { Switch } from '../Switch';
 import { customStyles, errorFormat } from '../../functions/Functions';
@@ -51,11 +51,11 @@ export const FormAddPerson = ({ onSubmit, isLoading, enterpriceSelected, setente
     useEffect(() => {
         const data: { Enterprices: Enterprices[]; Roles: Roles[]; ServicesTypes: ServicesTypes[]; } | undefined = queryClient.getQueryData(["GetGeneral"]);
         if (data) setGetGeneral(() => data);
-        else queryClient.invalidateQueries('GetGeneral');
+        else queryClient.invalidateQueries(['GetGeneral']);
 
         const dataOperators: { users: Array<{ user: string; password: string; name: string; }> } | undefined = queryClient.getQueryData(["GetUsersMon"]);
         if (dataOperators) setGetUsersMon(() => dataOperators.users);
-        else queryClient.invalidateQueries('GetUsersMon');
+        else queryClient.invalidateQueries(['GetUsersMon']);
 
         if (person?.id_role === 3) {
             setenterpriceSelected({ value: person.id_enterprice, label: person.enterpriceShortName });
@@ -281,7 +281,7 @@ export const FormEditPerson = ({ onSubmit, isLoading, isPasswordDefined, setisPa
     const { logOut } = useContext(AuthContext);
     const [urlFile, seturlFile] = useState<string | undefined>(undefined);
 
-    const sendFileM = useMutation('sendFileM', loadFile, {
+    const sendFileM = useMutation(['sendFileM'], loadFile, {
         onSuccess: async () => {
             ShowMessage({ text: 'Imagen agregada corractamente', title: 'Correcto', icon: 'success' });
             directory.mutate({ id: `${Person?.id_person}`, type: 'Person' })
@@ -297,7 +297,7 @@ export const FormEditPerson = ({ onSubmit, isLoading, isPasswordDefined, setisPa
         }
     });
 
-    const directory = useMutation('directory', getDirectory, {
+    const directory = useMutation(['directory'], getDirectory, {
         retry: false,
         onError: error => {
             seturlFile(undefined);

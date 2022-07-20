@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { getServices } from '../api/Api';
 import { formatDate, getDate, modDate } from '../functions/Functions';
 import { Services } from '../rules/interfaces';
@@ -28,7 +28,7 @@ export const ServicesPage = () => {
     const [oneDay, setoneDay] = useState<boolean>(false);
     const [Service, setService] = useState<Services | undefined>(undefined);
 
-    const { isSuccess, isLoading, refetch, isFetching, isFetched } = useQuery('Services', () => getServices({ start: start.date.date, end: end.date.date }), {
+    const { isSuccess, isLoading, refetch, isFetching, isFetched } = useQuery(['Services'], () => getServices({ start: start.date.date, end: end.date.date }), {
         refetchOnWindowFocus: false,
         onSuccess: data => {
             setservices(() => data.services);
