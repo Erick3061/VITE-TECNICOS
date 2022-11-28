@@ -1,7 +1,7 @@
 import { LogInData, Person, ResponseApi, datalogIn, Service, Account, PropsnewService, Technical, Services, PropsUpdateService, PropsUpdateTechnical, ServiceDetails, Enterprices, ServicesTypes, Roles, actionPersonProps, bodyPerson, actionEnterpriceProps, enterprice, responseLoadFile } from '../rules/interfaces';
 
-export const baseUrl = 'https://pem-sa.ddns.me:3007/api';
-// export const baseUrl = 'http://127.0.0.1:3007/api';
+// export const baseUrl = 'https://pem-sa.ddns.me:3007/api';
+export const baseUrl = 'http://127.0.0.1:3007/api';
 
 export const Api = (endpoint: string, data: object = {}, method: 'GET' | 'POST' = 'GET') => {
     const url = `${baseUrl}/${endpoint}`;
